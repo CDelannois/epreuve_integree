@@ -3,14 +3,12 @@
         "_id": "id de l'intercom chambre",
         "number": "numéro de la chambre",
         "phone": "numéro de téléphone de la chambre",
-        "event": {
-            "call": {
-                "level_1": "numéro du message",
-                "level_2": "numéro du message",
-                "level_3": "numéro du message"
-            },
-            "renfort": "numéro du message",
-            "incendie": {
+        "call": {
+            "level_1": "numéro du message",
+            "level_2": "numéro du message",
+            "level_3": "numéro du message",
+            "prise_en_charge": "numéro du message",
+            "presence": {
                 "debut": "numéro du message",
                 "fin": "numéro du message"
             },
@@ -53,12 +51,13 @@
     "fonctions": {
         "_id": "identifiant de la fonction",
         "title": "nom de la fonction",
-        "total": "nombre total de personnes répondant à cette fonction",
-        "enabled": "nombre de personnes actives répondant à cette fonction"
+        "total": "nombre total de personnes répondant à cette fonction ==> INCREMENTER DANS ROUTE COLLABORATEUR CHAQUE FOIS QU'UN COLLABORATEUR AVEC CE POSTE EST AJOUTE",
+        "enabled": "nombre de personnes actives répondant à cette fonction ==> EGAL AU NOMBRE DE COLLABORATEUR ACTIF AYANT CETTE FONCTION PREVOIR DANS LA ROUTE QUI ACTIVE OU DESACTIVE LE SOIGNANT"
     },
 
     "service": {
         "_id": "identifiant du service",
+        "key": "touche de raccourci du service",
         "virtual": "booléen",
         "name": "nom du service",
         "absent_phone": "numéro de téléphone",
@@ -66,7 +65,6 @@
         "level2": ["_id fonctions concernées si service non virtuel"],
         "level3": ["_id fonctions concernées si service non virtuel"],
         "services": ["_id services compris si service virtuel"]
-
     },
 
     "collaborateurs": {
@@ -82,31 +80,31 @@
     },
 
     "historique_soignants": {
-        "_id":"id de l'historique soignant",
-        "id soignant":"id du soignant",
+        "_id": "id de l'historique soignant",
+        "id soignant": "id du soignant",
         "login": "moment de login",
-        "logout": "moment de logout, pas ajouté au moment de la création du document mais seulement lorsque le soignant se logout",
+        "logout": "moment de logout, pas ajouté au moment de la création du document mais seulement lorsque le soignant se logout ==> PREVOIR UNE ROUTE POUR LOGOUT",
         "phone": "telephone utilisé",
         "service": "service dans lequel le travail a été effecuté",
-        "appels": ["liste des chambres ayant appelé"],
-        "prises_en_charge": ["liste des chambres ayant été prises en charge"],
-        "actages": ["liste des chambres où un actage a été réalisé"]
+        "appels": ["liste des chambres ayant appelé ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU"],
+        "prises_en_charge": ["liste des chambres ayant été prises en charge ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU"],
+        "actages": ["liste des chambres où un actage a été réalisé ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU"]
     },
 
-    "historique_appels":{
-        "_id":"id de l'historique",
-        "date":"date de l'appel",
-        "room":"numéro de la chambre",
-        "emplacement":"DEMANDER A BENOIT DE QUOI IL S'AGIT",
-        "id service":"id du service où se trouve la chambre",
-        "presence":{
-            "date":"moment où la présence débute DEMANDER A BENOIT COMMENT ON DETERMINE SI QUELQU'UN EST PRESENT",
-            "users":["id des users présents"]
+    "historique_appels": {
+        "_id": "id de l'historique",
+        "date": "date de l'appel",
+        "room": "numéro de la chambre",
+        "emplacement": "emplacement du bouton dans la chambre",
+        "id service": "id du service où se trouve la chambre",
+        "presence ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU": {
+            "date": "moment où la présence débute",
+            "users": ["id des users présents"]
         },
-        "actage":{
-            "date":"date de l'actage",
-            "user":"id de l'user qui a acté",
-            "reason":"motif de l'appel"
+        "actage": {
+            "date": "date de l'actage",
+            "user": "id de l'user qui a acté",
+            "reason": "motif de l'appel"
         }
     }
 }
