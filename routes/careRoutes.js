@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(careController.getAllCares)
+    .get(careController.getAllCares)
     .post(careController.createCare)
 
 // router

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(roomIntercomController.getAllRoomIntercoms)
+    .get(roomIntercomController.getAllRoomIntercoms)
     .post(roomIntercomController.createRoomIntercom)
 
 // router

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(serviceController.getAllServices)
+    .get(serviceController.getAllServices)
     .post(serviceController.createService)
 
 // router

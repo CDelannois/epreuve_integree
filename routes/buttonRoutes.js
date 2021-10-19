@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(buttonController.getAllButtons)
+    .get(buttonController.getAllButtons)
     .post(buttonController.createButton)
 
 // router

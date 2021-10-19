@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(collaboratorHistoryController.getAllCollaboratorsHistory)
+    .get(collaboratorHistoryController.getAllCollaboratorsHistory)
     .post(collaboratorHistoryController.createCollaboratorHistory)
 
 // router

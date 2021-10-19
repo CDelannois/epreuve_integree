@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(callHistoryController.getAllCallsHistory)
+    .get(callHistoryController.getAllCallsHistory)
     .post(callHistoryController.createCallHistory)
 
 // router

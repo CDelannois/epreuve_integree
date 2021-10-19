@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(collaboratorController.getAllCollaborators)
+    .get(collaboratorController.getAllCollaborators)
     .post(collaboratorController.createCollaborator)
 
 // router

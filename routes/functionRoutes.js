@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(functionController.getAllFunctions)
+    .get(functionController.getAllFunctions)
     .post(functionController.createFunction)
 
 // router

@@ -1,5 +1,24 @@
 const Collaborator = require('./../models/collaboratorModel');
 
+exports.getAllCollaborators = async (req, res) => {
+    try {
+        const collaborators = await Collaborator.find()
+
+        res.status(200).json({
+            status: 'succes',
+            results: collaborators.length,
+            data: {
+                collaborators
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+}
+
 exports.createCollaborator = async (req, res) => {
     try {
         const newCollaborator = await Collaborator.create(req.body);

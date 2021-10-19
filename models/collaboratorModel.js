@@ -35,7 +35,7 @@ const collaboratorSchema = new mongoose.Schema({
         unique: true,
     },
     active: {
-        type: [String],
+        type: Boolean,
         required: [true, `Collaborator's active status is required.`]
     },
 });

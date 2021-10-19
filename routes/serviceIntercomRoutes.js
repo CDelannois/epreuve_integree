@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .route('/')
-    // .get(serviceIntercomController.getAllServiceIntercoms)
+    .get(serviceIntercomController.getAllServiceIntercoms)
     .post(serviceIntercomController.createServiceIntercom)
 
 // router
