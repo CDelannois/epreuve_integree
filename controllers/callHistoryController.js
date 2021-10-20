@@ -19,6 +19,24 @@ exports.getAllCallsHistory = async (req, res) => {
     }
 }
 
+exports.getOneCallHistory = async (req, res) => {
+    try {
+        const callHistory = await CallHistory.findById(req.params.id);
+
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                callHistory
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+}
+
 exports.createCallHistory = async (req, res) => {
     try {
         const newCallHistory = await CallHistory.create(req.body);

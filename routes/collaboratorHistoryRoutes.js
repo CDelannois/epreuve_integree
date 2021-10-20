@@ -8,9 +8,9 @@ router
     .get(collaboratorHistoryController.getAllCollaboratorsHistory)
     .post(collaboratorHistoryController.createCollaboratorHistory)
 
-// router
-//     .route('/:id')
-//     .get(collaboratorHistoryController.getCollaboratorHistory)
+router
+    .route('/:id')
+    .get(collaboratorHistoryController.getOneCollaboratorHistory)
 //     .patch(collaboratorHistoryController.updateCollaboratorHistory)
 //     .delete(collaboratorHistoryController.deleteCollaboratorHistory)
 

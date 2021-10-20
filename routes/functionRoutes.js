@@ -10,7 +10,6 @@ router
 
 // router
 //     .route('/:id')
-//     .get(functionController.getFunction)
 //     .patch(functionController.updateFunction)
 //     .delete(functionController.deleteFunction)
 

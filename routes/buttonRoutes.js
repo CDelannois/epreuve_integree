@@ -10,7 +10,6 @@ router
 
 // router
 //     .route('/:id')
-//     .get(buttonController.getButton)
 //     .patch(buttonController.updateButton)
 //     .delete(buttonController.deleteButton)
 

@@ -10,7 +10,6 @@ router
 
 // router
 //     .route('/:id')
-//     .get(careController.getCare)
 //     .patch(careController.updateCare)
 //     .delete(careController.deleteCare)
 

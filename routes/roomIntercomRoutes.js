@@ -10,7 +10,6 @@ router
 
 // router
 //     .route('/:id')
-//     .get(roomIntercomController.getRoomIntercom)
 //     .patch(roomIntercomController.updateRoomIntercom)
 //     .delete(roomIntercomController.deleteRoomIntercom)
 

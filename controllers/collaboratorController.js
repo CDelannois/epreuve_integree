@@ -19,6 +19,24 @@ exports.getAllCollaborators = async (req, res) => {
     }
 }
 
+exports.getOneCollaborator = async (req, res) => {
+    try {
+        const collaborator = await Collaborator.findById(req.params.id);
+
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                collaborator
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+}
+
 exports.createCollaborator = async (req, res) => {
     try {
         const newCollaborator = await Collaborator.create(req.body);

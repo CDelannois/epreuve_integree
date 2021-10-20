@@ -10,7 +10,6 @@ router
 
 // router
 //     .route('/:id')
-//     .get(serviceController.getService)
 //     .patch(serviceController.updateService)
 //     .delete(serviceController.deleteService)
 

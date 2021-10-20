@@ -8,9 +8,9 @@ router
     .get(collaboratorController.getAllCollaborators)
     .post(collaboratorController.createCollaborator)
 
-// router
-//     .route('/:id')
-//     .get(collaboratorController.getCollaborator)
+router
+    .route('/:id')
+    .get(collaboratorController.getOneCollaborator)
 //     .patch(collaboratorController.updateCollaborator)
 //     .delete(collaboratorController.deleteCollaborator)
 

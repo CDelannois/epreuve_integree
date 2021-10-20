@@ -10,7 +10,6 @@ router
 
 // router
 //     .route('/:id')
-//     .get(serviceIntercomController.getServiceIntercom)
 //     .patch(serviceIntercomController.updateServiceIntercom)
 //     .delete(serviceIntercomController.deleteServiceIntercom)
 

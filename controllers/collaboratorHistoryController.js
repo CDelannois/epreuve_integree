@@ -19,6 +19,24 @@ exports.getAllCollaboratorsHistory = async (req, res) => {
     }
 };
 
+exports.getOneCollaboratorHistory = async (req, res) => {
+    try {
+        const collaboratorHistory = await CollaboratorHistory.findById(req.params.id);
+
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                collaboratorHistory
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+}
+
 exports.createCollaboratorHistory = async (req, res) => {
     try {
         const newCollaboratorHistory = await CollaboratorHistory.create(req.body);
