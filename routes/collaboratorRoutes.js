@@ -11,7 +11,7 @@ router
 router
     .route('/:id')
     .get(collaboratorController.getOneCollaborator)
-//     .patch(collaboratorController.updateCollaborator)
+    .patch(collaboratorController.updateCollaborator)
 //     .delete(collaboratorController.deleteCollaborator)
 
 module.exports = router;

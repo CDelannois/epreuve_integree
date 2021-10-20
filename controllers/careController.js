@@ -17,7 +17,7 @@ exports.getAllCares = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createCare = async (req, res) => {
     try {
@@ -35,4 +35,25 @@ exports.createCare = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateCare = async (req, res) => {
+    try {
+        const updatedCare = await Care.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                care: updatedCare
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

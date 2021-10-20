@@ -35,7 +35,7 @@ exports.getOneCollaboratorHistory = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createCollaboratorHistory = async (req, res) => {
     try {
@@ -53,4 +53,25 @@ exports.createCollaboratorHistory = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateCollaboratorHistory = async (req, res) => {
+    try {
+        const updatedCollaboratorHistory = await CollaboratorHistory.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                collaboratorHistory: updatedCollaboratorHistory
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

@@ -8,9 +8,9 @@ router
     .get(roomIntercomController.getAllRoomIntercoms)
     .post(roomIntercomController.createRoomIntercom)
 
-// router
-//     .route('/:id')
-//     .patch(roomIntercomController.updateRoomIntercom)
+router
+    .route('/:id')
+    .patch(roomIntercomController.updateRoomIntercom)
 //     .delete(roomIntercomController.deleteRoomIntercom)
 
 module.exports = router;

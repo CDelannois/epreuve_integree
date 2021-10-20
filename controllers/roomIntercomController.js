@@ -17,7 +17,7 @@ exports.getAllRoomIntercoms = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createRoomIntercom = async (req, res) => {
     try {
@@ -35,4 +35,25 @@ exports.createRoomIntercom = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateRoomIntercom = async (req, res) => {
+    try {
+        const updatedRoomIntercom = await RoomIntercom.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                roomIntercom: updatedRoomIntercom
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

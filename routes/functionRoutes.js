@@ -8,9 +8,9 @@ router
     .get(functionController.getAllFunctions)
     .post(functionController.createFunction)
 
-// router
-//     .route('/:id')
-//     .patch(functionController.updateFunction)
+router
+    .route('/:id')
+    .patch(functionController.updateFunction)
 //     .delete(functionController.deleteFunction)
 
 module.exports = router;

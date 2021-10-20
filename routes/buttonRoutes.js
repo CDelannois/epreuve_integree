@@ -8,9 +8,9 @@ router
     .get(buttonController.getAllButtons)
     .post(buttonController.createButton)
 
-// router
-//     .route('/:id')
-//     .patch(buttonController.updateButton)
+router
+    .route('/:id')
+    .patch(buttonController.updateButton)
 //     .delete(buttonController.deleteButton)
 
 module.exports = router;

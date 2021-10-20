@@ -17,7 +17,7 @@ exports.getAllButtons = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createButton = async (req, res) => {
     try {
@@ -35,4 +35,25 @@ exports.createButton = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateButton = async (req, res) => {
+    try {
+        const updatedButton = await Button.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                button: updatedButton
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

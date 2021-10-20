@@ -8,9 +8,9 @@ router
     .get(careController.getAllCares)
     .post(careController.createCare)
 
-// router
-//     .route('/:id')
-//     .patch(careController.updateCare)
+router
+    .route('/:id')
+    .patch(careController.updateCare)
 //     .delete(careController.deleteCare)
 
 module.exports = router;

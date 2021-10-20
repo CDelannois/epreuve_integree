@@ -16,7 +16,7 @@ exports.getAllServiceIntercoms = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createServiceIntercom = async (req, res) => {
     try {
@@ -34,4 +34,25 @@ exports.createServiceIntercom = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateServiceIntercom = async (req, res) => {
+    try {
+        const updatedServiceIntercom = await ServiceIntercom.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                serviceIntercom: updatedServiceIntercom
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

@@ -17,7 +17,7 @@ exports.getAllCallsHistory = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.getOneCallHistory = async (req, res) => {
     try {
@@ -35,7 +35,7 @@ exports.getOneCallHistory = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createCallHistory = async (req, res) => {
     try {
@@ -54,4 +54,25 @@ exports.createCallHistory = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateCallHistory = async (req, res) => {
+    try {
+        const updatedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                callHistory: updatedCallHistory
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

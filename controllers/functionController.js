@@ -17,7 +17,7 @@ exports.getAllFunctions = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createFunction = async (req, res) => {
     try {
@@ -35,4 +35,25 @@ exports.createFunction = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateFunction = async (req, res) => {
+    try {
+        const updatedFunction = await Function.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                function: updatedFunction
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

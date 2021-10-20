@@ -8,9 +8,9 @@ router
     .get(serviceController.getAllServices)
     .post(serviceController.createService)
 
-// router
-//     .route('/:id')
-//     .patch(serviceController.updateService)
+router
+    .route('/:id')
+    .patch(serviceController.updateService)
 //     .delete(serviceController.deleteService)
 
 module.exports = router;

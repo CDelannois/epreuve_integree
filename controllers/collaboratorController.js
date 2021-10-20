@@ -17,7 +17,7 @@ exports.getAllCollaborators = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.getOneCollaborator = async (req, res) => {
     try {
@@ -35,7 +35,7 @@ exports.getOneCollaborator = async (req, res) => {
             message: err
         })
     }
-}
+};
 
 exports.createCollaborator = async (req, res) => {
     try {
@@ -53,4 +53,25 @@ exports.createCollaborator = async (req, res) => {
             message: err
         })
     }
-}
+};
+
+exports.updateCollaborator = async (req, res) => {
+    try {
+        const updatedCollaborator = await Collaborator.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        res.status(200).json({
+            status: 'succes',
+            data: {
+                collaborator: updatedCollaborator
+            }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};
