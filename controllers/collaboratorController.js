@@ -1,4 +1,5 @@
 const Collaborator = require('./../models/collaboratorModel');
+const CollaboratorHistory = require('./../models/collaboratorHistoryModel');
 const hash = require('./passwordHash');
 
 exports.getAllCollaborators = async (req, res) => {
@@ -85,10 +86,21 @@ exports.updateCollaborator = async (req, res) => {
 exports.deleteCollaborator = async (req, res) => {
 
     try {
-        await Collaborator.findByIdAndDelete(req.params.id)
-        res.status(204).json({
-            status: 'succes'
-        })
+        //Avant suppression, vérifier historique collaborateur
+        const collaboratorHistory = await CollaboratorHistory.findOne({ collaborator: req.params.id });
+
+        if (collaboratorHistory) {
+            res.status(200).json({
+                status: 'stopped',
+                message: `This collaborator is used in another entry. It coudldn't be deleted.`
+            });
+        }
+        else {
+            await Collaborator.findByIdAndDelete(req.params.id)
+            res.status(204).json({
+                status: 'succes'
+            })
+        }
     }
     catch (err) {
         res.status(404).json({

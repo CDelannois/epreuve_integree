@@ -1,4 +1,6 @@
 const Function = require('./../models/functionModel');
+const Collaborator = require('./../models/collaboratorModel');
+const Service = require('./../models/serviceModel');
 
 exports.getAllFunctions = async (req, res) => {
     try {
@@ -61,10 +63,21 @@ exports.updateFunction = async (req, res) => {
 exports.deleteFunction = async (req, res) => {
 
     try {
-        await Function.findByIdAndDelete(req.params.id)
-        res.status(204).json({
-            status: 'succes'
-        })
+        // Avant la suppression, vérifier collaborateur et service.
+        const collaborator = await Collaborator.findOne({ function: req.params.id });
+        const service = await Service.findOne({ level3: req.params.id });
+
+        if (collaborator || service) {
+            res.status(200).json({
+                status: 'stopped',
+                message: `This function is used in another entry. It coudldn't be deleted.`
+            });
+        } else {
+            await Function.findByIdAndDelete(req.params.id)
+            res.status(204).json({
+                status: 'succes'
+            })
+        }
     }
     catch (err) {
         res.status(404).json({

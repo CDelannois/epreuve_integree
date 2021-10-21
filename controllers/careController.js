@@ -1,4 +1,5 @@
 const Care = require('./../models/careModel');
+const CallHistory = require('./../models/callHistoryModel');
 
 exports.getAllCares = async (req, res) => {
     try {
@@ -60,11 +61,21 @@ exports.updateCare = async (req, res) => {
 
 exports.deleteCare = async (req, res) => {
 
+    //Avant la suppression, vérifier historique appel
     try {
-        await Care.findByIdAndDelete(req.params.id)
-        res.status(204).json({
-            status: 'succes'
-        })
+        const callHistory = await CallHistory.findOne({ service: req.params.id });
+
+        if (callHistory.length > 0) {
+            res.status(200).json({
+                status: 'stopped',
+                message: `This care is used in another entry. It coudldn't be deleted.`
+            });
+        } else {
+            await Care.findByIdAndDelete(req.params.id)
+            res.status(204).json({
+                status: 'succes'
+            })
+        }
     }
     catch (err) {
         res.status(404).json({

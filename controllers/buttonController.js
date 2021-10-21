@@ -63,10 +63,19 @@ exports.deleteButton = async (req, res) => {
 
     //Avant la suppression, vérifier historique appel
     try {
-        await Button.findByIdAndDelete(req.params.id)
-        res.status(204).json({
-            status: 'succes'
-        })
+        const callHistory = await CallHistory.findOne({ location: req.params.id });
+
+        if (callHistory) {
+            res.status(200).json({
+                status: 'stopped',
+                message: `This button is used in another entry. It coudldn't be deleted.`
+            });
+        } else {
+            await Button.findByIdAndDelete(req.params.id)
+            res.status(204).json({
+                status: 'succes'
+            })
+        }
     }
     catch (err) {
         res.status(404).json({
