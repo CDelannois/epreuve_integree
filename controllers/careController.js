@@ -57,3 +57,19 @@ exports.updateCare = async (req, res) => {
         })
     }
 };
+
+exports.deleteCare = async (req, res) => {
+
+    try {
+        await Care.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

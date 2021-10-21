@@ -11,6 +11,6 @@ router
 router
     .route('/:id')
     .patch(serviceController.updateService)
-//     .delete(serviceController.deleteService)
+    .delete(serviceController.deleteService)
 
 module.exports = router;

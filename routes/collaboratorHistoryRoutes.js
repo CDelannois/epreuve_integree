@@ -12,6 +12,6 @@ router
     .route('/:id')
     .get(collaboratorHistoryController.getOneCollaboratorHistory)
     .patch(collaboratorHistoryController.updateCollaboratorHistory)
-//     .delete(collaboratorHistoryController.deleteCollaboratorHistory)
+    .delete(collaboratorHistoryController.deleteCollaboratorHistory)
 
 module.exports = router;

@@ -57,3 +57,19 @@ exports.updateService = async (req, res) => {
         })
     }
 };
+
+exports.deleteService = async (req, res) => {
+
+    try {
+        await Service.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

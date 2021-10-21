@@ -11,6 +11,6 @@ router
 router
     .route('/:id')
     .patch(careController.updateCare)
-//     .delete(careController.deleteCare)
+    .delete(careController.deleteCare)
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Collaborator = require('./../models/collaboratorModel');
+const hash = require('./passwordHash');
 
 exports.getAllCollaborators = async (req, res) => {
     try {
@@ -38,6 +39,8 @@ exports.getOneCollaborator = async (req, res) => {
 };
 
 exports.createCollaborator = async (req, res) => {
+
+    req.body.password = hash(req.body.password);
     try {
         const newCollaborator = await Collaborator.create(req.body);
 
@@ -56,6 +59,9 @@ exports.createCollaborator = async (req, res) => {
 };
 
 exports.updateCollaborator = async (req, res) => {
+    if (req.body.password) {
+        req.body.password = hash(req.body.password);
+    };
     try {
         const updatedCollaborator = await Collaborator.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -66,6 +72,22 @@ exports.updateCollaborator = async (req, res) => {
             data: {
                 collaborator: updatedCollaborator
             }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};
+
+exports.deleteCollaborator = async (req, res) => {
+
+    try {
+        await Collaborator.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
         })
     }
     catch (err) {

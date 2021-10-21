@@ -57,3 +57,19 @@ exports.updateRoomIntercom = async (req, res) => {
         })
     }
 };
+
+exports.deleteRoomIntercom = async (req, res) => {
+
+    try {
+        await RoomIntercom.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

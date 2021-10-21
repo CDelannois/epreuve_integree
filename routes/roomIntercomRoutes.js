@@ -11,6 +11,6 @@ router
 router
     .route('/:id')
     .patch(roomIntercomController.updateRoomIntercom)
-//     .delete(roomIntercomController.deleteRoomIntercom)
+    .delete(roomIntercomController.deleteRoomIntercom)
 
 module.exports = router;

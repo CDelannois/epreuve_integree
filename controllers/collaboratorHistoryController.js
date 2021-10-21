@@ -75,3 +75,19 @@ exports.updateCollaboratorHistory = async (req, res) => {
         })
     }
 };
+
+exports.deleteCollaboratorHistory = async (req, res) => {
+
+    try {
+        await CollaboratorHistory.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

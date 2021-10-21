@@ -56,3 +56,19 @@ exports.updateServiceIntercom = async (req, res) => {
         })
     }
 };
+
+exports.deleteServiceIntercom = async (req, res) => {
+
+    try {
+        await ServiceIntercom.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

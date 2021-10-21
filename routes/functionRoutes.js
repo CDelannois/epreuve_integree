@@ -11,6 +11,6 @@ router
 router
     .route('/:id')
     .patch(functionController.updateFunction)
-//     .delete(functionController.deleteFunction)
+    .delete(functionController.deleteFunction)
 
 module.exports = router;

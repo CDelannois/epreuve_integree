@@ -12,6 +12,6 @@ router
     .route('/:id')
     .get(callHistoryController.getOneCallHistory)
     .patch(callHistoryController.updateCallHistory)
-//     .delete(callHistoryController.deleteCallHistory)
+    .delete(callHistoryController.deleteCallHistory)
 
 module.exports = router;

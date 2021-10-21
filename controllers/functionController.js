@@ -57,3 +57,19 @@ exports.updateFunction = async (req, res) => {
         })
     }
 };
+
+exports.deleteFunction = async (req, res) => {
+
+    try {
+        await Function.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

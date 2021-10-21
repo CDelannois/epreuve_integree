@@ -11,6 +11,6 @@ router
 router
     .route('/:id')
     .patch(serviceIntercomController.updateServiceIntercom)
-//     .delete(serviceIntercomController.deleteServiceIntercom)
+    .delete(serviceIntercomController.deleteServiceIntercom)
 
 module.exports = router;

@@ -76,3 +76,19 @@ exports.updateCallHistory = async (req, res) => {
         })
     }
 };
+
+exports.deleteCallHistory = async (req, res) => {
+
+    try {
+        await CallHistory.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};

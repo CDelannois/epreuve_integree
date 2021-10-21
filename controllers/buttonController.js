@@ -1,4 +1,5 @@
 const Button = require('./../models/buttonModel');
+const CallHistory = require('./../models/callHistoryModel');
 
 exports.getAllButtons = async (req, res) => {
     try {
@@ -48,6 +49,23 @@ exports.updateButton = async (req, res) => {
             data: {
                 button: updatedButton
             }
+        })
+    }
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};
+
+exports.deleteButton = async (req, res) => {
+
+    //Avant la suppression, vérifier historique appel
+    try {
+        await Button.findByIdAndDelete(req.params.id)
+        res.status(204).json({
+            status: 'succes'
         })
     }
     catch (err) {

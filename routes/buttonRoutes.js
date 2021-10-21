@@ -11,6 +11,6 @@ router
 router
     .route('/:id')
     .patch(buttonController.updateButton)
-//     .delete(buttonController.deleteButton)
+    .delete(buttonController.deleteButton)
 
 module.exports = router;
