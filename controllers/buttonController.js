@@ -3,8 +3,7 @@ const CallHistory = require('./../models/callHistoryModel');
 
 exports.getAllButtons = async (req, res) => {
     try {
-        const buttons = await Button.find()
-
+        const buttons = await Button.find();
         res.status(200).json({
             status: 'succes',
             results: buttons.length,

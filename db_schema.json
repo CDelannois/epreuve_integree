@@ -1,46 +1,4 @@
 {
-    "intercom_chambre": {
-        "_id": "id de l'intercom chambre",
-        "number": "numéro de la chambre",
-        "phone": "numéro de téléphone de la chambre",
-        "call": {
-            "level_1": "numéro du message",
-            "level_2": "numéro du message",
-            "level_3": "numéro du message",
-            "prise_en_charge": "numéro du message",
-            "presence": {
-                "debut": "numéro du message",
-                "fin": "numéro du message"
-            },
-            "actage": "numéro du message"
-        }
-    },
-
-    "intercom_service": {
-        "_id": "id de l'intercom service",
-        "name": "nom du service",
-        "phone": "numéro de téléphone du service",
-        "event": {
-            "repas": {
-                "matin": "numéro du message",
-                "midi": "numéro du message",
-                "soir": "numéro du message"
-            },
-            "renfort": "numéro du message",
-            "incendie": {
-                "debut": "numéro du message",
-                "fin": "numéro du message"
-            },
-            "activite": "numéro du message"
-        }
-    },
-
-    "soin": {
-        "_id": "identifiant du soin",
-        "intitule": "nom du soin",
-        "key": "touche de raccourci du soin"
-    },
-
     "bouton": {
         "_id": "identifiant du bouton",
         "intitule": "nom du bouton",
@@ -48,23 +6,27 @@
         "key": "touche du bouton"
     },
 
-    "fonctions": {
-        "_id": "identifiant de la fonction",
-        "title": "nom de la fonction",
-        "total": "nombre total de personnes répondant à cette fonction ==> INCREMENTER DANS ROUTE COLLABORATEUR CHAQUE FOIS QU'UN COLLABORATEUR AVEC CE POSTE EST AJOUTE",
-        "enabled": "nombre de personnes actives répondant à cette fonction ==> EGAL AU NOMBRE DE COLLABORATEUR ACTIF AYANT CETTE FONCTION PREVOIR DANS LA ROUTE QUI ACTIVE OU DESACTIVE LE SOIGNANT"
+    "historique_appels": {
+        "_id": "id de l'historique",
+        "date": "date de l'appel",
+        "room": "numéro de la chambre",
+        "emplacement": "emplacement du bouton dans la chambre",
+        "id service": "id du service où se trouve la chambre",
+        "presence ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU": {
+            "date": "moment où la présence débute",
+            "users": ["id des users présents"]
+        },
+        "actage ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU": {
+            "date": "date de l'actage",
+            "user": "id de l'user qui a acté",
+            "reason": "motif de l'appel"
+        }
     },
 
-    "service": {
-        "_id": "identifiant du service",
-        "key": "touche de raccourci du service",
-        "virtual": "booléen",
-        "name": "nom du service",
-        "absent_phone": "numéro de téléphone",
-        "level1": ["_id fonctions concernées si service non virtuel"],
-        "level2": ["_id fonctions concernées si service non virtuel"],
-        "level3": ["_id fonctions concernées si service non virtuel"],
-        "services": ["_id services compris si service virtuel"]
+    "soin": {
+        "_id": "identifiant du soin",
+        "intitule": "nom du soin",
+        "key": "touche de raccourci du soin"
     },
 
     "collaborateurs": {
@@ -91,20 +53,58 @@
         "actages": ["liste des chambres où un actage a été réalisé ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU"]
     },
 
-    "historique_appels": {
-        "_id": "id de l'historique",
-        "date": "date de l'appel",
-        "room": "numéro de la chambre",
-        "emplacement": "emplacement du bouton dans la chambre",
-        "id service": "id du service où se trouve la chambre",
-        "presence ==> PREVOIR UNE ROUTE POUR PUSH DANS LE TABLEAU": {
-            "date": "moment où la présence débute",
-            "users": ["id des users présents"]
-        },
-        "actage": {
-            "date": "date de l'actage",
-            "user": "id de l'user qui a acté",
-            "reason": "motif de l'appel"
+    "fonctions": {
+        "_id": "identifiant de la fonction",
+        "title": "nom de la fonction",
+        "total": "nombre total de personnes répondant à cette fonction ==> INCREMENTER DANS ROUTE COLLABORATEUR CHAQUE FOIS QU'UN COLLABORATEUR AVEC CE POSTE EST AJOUTE",
+        "enabled": "nombre de personnes actives répondant à cette fonction ==> EGAL AU NOMBRE DE COLLABORATEUR ACTIF AYANT CETTE FONCTION PREVOIR DANS LA ROUTE QUI ACTIVE OU DESACTIVE LE SOIGNANT"
+    },
+
+    "intercom_chambre": {
+        "_id": "id de l'intercom chambre",
+        "number": "numéro de la chambre",
+        "phone": "numéro de téléphone de la chambre",
+        "call": {
+            "level_1": "numéro du message",
+            "level_2": "numéro du message",
+            "level_3": "numéro du message",
+            "prise_en_charge": "numéro du message",
+            "presence": {
+                "debut": "numéro du message",
+                "fin": "numéro du message"
+            },
+            "actage": "numéro du message"
+        }
+    },
+
+    "service": {
+        "_id": "identifiant du service",
+        "key": "touche de raccourci du service",
+        "virtual": "booléen",
+        "name": "nom du service",
+        "absent_phone": "numéro de téléphone",
+        "level1": ["_id fonctions concernées si service non virtuel"],
+        "level2": ["_id fonctions concernées si service non virtuel"],
+        "level3": ["_id fonctions concernées si service non virtuel"],
+        "services": ["_id services compris si service virtuel"]
+    },
+
+    "intercom_service": {
+        "_id": "id de l'intercom service",
+        "name": "nom du service",
+        "phone": "numéro de téléphone du service",
+        "event": {
+            "repas": {
+                "matin": "numéro du message",
+                "midi": "numéro du message",
+                "soir": "numéro du message"
+            },
+            "renfort": "numéro du message",
+            "incendie": {
+                "debut": "numéro du message",
+                "fin": "numéro du message"
+            },
+            "activite": "numéro du message"
         }
     }
 }
