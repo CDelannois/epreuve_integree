@@ -1,0 +1,996 @@
+{
+	"info": {
+		"_postman_id": "17291872-29d3-4540-983f-e50c253b6ed8",
+		"name": "Healthcall",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Buttons",
+			"item": [
+				{
+					"name": "Get all buttons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/button/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"button",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post button",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Toilette\",\r\n    \"tts\":\"toilette\",\r\n    \"key\":5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/button/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"button",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update button",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/button/616c73cd79f8e94b40069745",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"button",
+								"616c73cd79f8e94b40069745"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete button",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/button/616c73cd79f8e94b40069745",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"button",
+								"616c73cd79f8e94b40069745"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Call history",
+			"item": [
+				{
+					"name": "Get all calls history",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/callHistory/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"callHistory",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post call history",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "date",
+									"value": "1634490031000",
+									"type": "text"
+								},
+								{
+									"key": "room",
+									"value": "101",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "616bed945f3db13cf8e33a87",
+									"type": "text"
+								},
+								{
+									"key": "service",
+									"value": "616bed945f3db13cf8e33a87",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/callHistory/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"callHistory",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update call history",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "location",
+									"value": "6171944554bab656d4adbac0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/callHistory/616fb38189dd5c4fd0c740d0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"callHistory",
+								"616fb38189dd5c4fd0c740d0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete call history",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Care",
+			"item": [
+				{
+					"name": "Get all cares",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/care/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"care",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post care",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Aide",
+									"type": "text"
+								},
+								{
+									"key": "key",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/care/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"care",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update care",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/care/616c73eb79f8e94b40069747",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"care",
+								"616c73eb79f8e94b40069747"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete care",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/care/616c73eb79f8e94b40069747",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"care",
+								"616c73eb79f8e94b40069747"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Collaborator",
+			"item": [
+				{
+					"name": "Get all collaborators",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/collaborator/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaborator",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post collaborator",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/collaborator/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaborator",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update collaborator",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Jean Jean",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/collaborator/616e685ab79b7a4b2074e585",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaborator",
+								"616e685ab79b7a4b2074e585"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete collaborator",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/collaborator/616e685ab79b7a4b2074e585",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaborator",
+								"616e685ab79b7a4b2074e585"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Collaborator History",
+			"item": [
+				{
+					"name": "Get all collaborators history",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/collaboratorHistory/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaboratorHistory",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post collaborator history",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/collaboratorHistory/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaboratorHistory",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update collaborator history",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/collaboratorHistory/616c8a29a253a1113421c4c8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaboratorHistory",
+								"616c8a29a253a1113421c4c8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete collaborator history",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/collaboratorHistory/616c8a29a253a1113421c4c8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"collaboratorHistory",
+								"616c8a29a253a1113421c4c8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Function",
+			"item": [
+				{
+					"name": "Get all functions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/function/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"function",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post function",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Ergothérapeute",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/function/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"function",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update function",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/function/616c753c5a7c2711b8af8748",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"function",
+								"616c753c5a7c2711b8af8748"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete function",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/function/616c753c5a7c2711b8af8748",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"function",
+								"616c753c5a7c2711b8af8748"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Room intercom",
+			"item": [
+				{
+					"name": "Get room intercom",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/roomIntercom/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"roomIntercom",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post room intercom",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "roomNumber",
+									"value": "102",
+									"type": "text"
+								},
+								{
+									"key": "roomPhone",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "call.level1",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "call.level2",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "call.level3",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "call.handling",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "call.presence.beginning",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "call.presence.end",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "call.actage",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/roomIntercom/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"roomIntercom",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update room intercom",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/roomIntercom/616c7d15fd53a538c8d14a4d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"roomIntercom",
+								"616c7d15fd53a538c8d14a4d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete room intercom",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/roomIntercom/616c7d15fd53a538c8d14a4d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"roomIntercom",
+								"616c7d15fd53a538c8d14a4d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sevice",
+			"item": [
+				{
+					"name": "Get service",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/service/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post service",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "key",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "virtual",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Rez de chaussée",
+									"type": "text"
+								},
+								{
+									"key": "absentPhone",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "level1.0",
+									"value": "616c753c5a7c2711b8af8748",
+									"type": "text"
+								},
+								{
+									"key": "level2.0",
+									"value": "616c753c5a7c2711b8af8748",
+									"type": "text"
+								},
+								{
+									"key": "level2.1",
+									"value": "616c75465a7c2711b8af874a",
+									"type": "text"
+								},
+								{
+									"key": "level3.0",
+									"value": "616c753c5a7c2711b8af8748",
+									"type": "text"
+								},
+								{
+									"key": "level3.1",
+									"value": "616c75465a7c2711b8af874a",
+									"type": "text"
+								},
+								{
+									"key": "level3.2",
+									"value": "616c75525a7c2711b8af874c",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/service/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update service",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/service/616c88c1782c55fa8af54c3d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service",
+								"616c88c1782c55fa8af54c3d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete service",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/service/616c88c1782c55fa8af54c3d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"service",
+								"616c88c1782c55fa8af54c3d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Service intercom",
+			"item": [
+				{
+					"name": "Get service intercom",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/serviceIntercom/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"serviceIntercom",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post service intercom",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "service",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "event.meal.breakfast",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "event.meal.lunch",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "event.meal.diner",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "event.help",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "event.fire.begin",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "event.fire.end",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "event.activity",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/serviceIntercom",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"serviceIntercom"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update service intercom",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/serviceIntercom/61703eea97101e0ace8d3531",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"serviceIntercom",
+								"61703eea97101e0ace8d3531"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete service intercom",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/serviceIntercom/61703eea97101e0ace8d3531",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"serviceIntercom",
+								"61703eea97101e0ace8d3531"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

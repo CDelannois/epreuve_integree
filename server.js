@@ -33,7 +33,7 @@ mongoose.connect(DB, {
 });
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use('/button', buttonRouter);
 app.use('/callHistory', callHistoryRouter);
 app.use('/care', careRouter);

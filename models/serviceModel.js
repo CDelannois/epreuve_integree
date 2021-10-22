@@ -26,7 +26,6 @@ const serviceSchema = new mongoose.Schema({
             return this.virtual === false;
         },
             'Level 1 functions ID required'],
-        default: undefined,
     },
     level2: {
         type: [ObjectId],
@@ -34,7 +33,6 @@ const serviceSchema = new mongoose.Schema({
             return this.virtual === false;
         },
             'Level 2 functions ID required'],
-        default: undefined,
     },
     level3: {
         type: [ObjectId],
@@ -42,7 +40,6 @@ const serviceSchema = new mongoose.Schema({
             return this.virtual === false;
         },
             'Level 3 functions ID required'],
-        default: undefined,
     },
     services: {
         type: [ObjectId],
@@ -50,7 +47,11 @@ const serviceSchema = new mongoose.Schema({
             return this.virtual === true;
         },
             'Services ID required'],
-        default: undefined,
+        default: [function () {
+            if (!this.virtual) {
+                return undefined;
+            }
+        }],
     },
 });
 
