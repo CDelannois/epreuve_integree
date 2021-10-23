@@ -47,11 +47,6 @@ const serviceSchema = new mongoose.Schema({
             return this.virtual === true;
         },
             'Services ID required'],
-        default: [function () {
-            if (!this.virtual) {
-                return undefined;
-            }
-        }],
     },
 });
 

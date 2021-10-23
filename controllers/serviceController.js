@@ -71,7 +71,7 @@ exports.deleteService = async (req, res) => {
         if (callHistory || collaboratorHistory || serviceIntercom) {
             res.status(200).json({
                 status: 'stopped',
-                message: `This collaborator is used in another entry. It coudldn't be deleted.`
+                message: `This service is used in another entry. It coudldn't be deleted.`
             });
         } else {
             await Service.findByIdAndDelete(req.params.id)

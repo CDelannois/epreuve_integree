@@ -17,7 +17,7 @@ const mealSchema = new mongoose.Schema({
     _id: false,
 });
 
-const beginEndSchema = new mongoose.Schema({
+const fireSchema = new mongoose.Schema({
     begin: {
         type: Number,
         required: [true, 'Fire beginning message required.'],
@@ -25,14 +25,6 @@ const beginEndSchema = new mongoose.Schema({
     end: {
         type: Number,
         required: [true, 'Fire ending message required.'],
-    },
-    _id: false,
-});
-
-const fireSchema = new mongoose.Schema({
-    fire: {
-        type: beginEndSchema,
-        required: [true, 'Fire incident messages required.'],
     },
     _id: false,
 });
