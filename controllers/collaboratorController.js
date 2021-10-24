@@ -1,4 +1,5 @@
 const Collaborator = require('./../models/collaboratorModel');
+const Function = require('./../models/functionModel');
 const CollaboratorHistory = require('./../models/collaboratorHistoryModel');
 const hash = require('./passwordHash');
 
@@ -40,15 +41,17 @@ exports.getOneCollaborator = async (req, res) => {
 };
 
 exports.createCollaborator = async (req, res) => {
-
     req.body.password = hash(req.body.password);
     try {
         const newCollaborator = await Collaborator.create(req.body);
-
+        const functionTotal = await Collaborator.find({ function: req.body.function });
+        const update = { total: functionTotal.length };
+        const functionUpdate = await Function.findByIdAndUpdate(req.body.function, update, { new: true });
         res.status(201).json({
             status: 'success',
             data: {
-                collaborator: newCollaborator
+                collaborator: newCollaborator,
+                newAmount: functionUpdate.total
             }
         });
     } catch (err) {
@@ -96,7 +99,12 @@ exports.deleteCollaborator = async (req, res) => {
             });
         }
         else {
-            await Collaborator.findByIdAndDelete(req.params.id)
+            const collaboratorFunction = await Collaborator.findById(req.params.id);
+            const idFunction = collaboratorFunction.function;
+            await Collaborator.findByIdAndDelete(req.params.id);
+            const functionTotal = await Function.findById(idFunction);
+            const update = { total: functionTotal.total - 1 };
+            await Function.findByIdAndUpdate(idFunction, update, { new: true });
             res.status(204).json({
                 status: 'succes'
             })

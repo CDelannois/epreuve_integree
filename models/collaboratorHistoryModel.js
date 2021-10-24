@@ -8,7 +8,12 @@ const collaboratorHistorySchema = new mongoose.Schema({
     },
     loginDate: {
         type: Date,
+        default: Date.now,
         required: [true, 'Login date is required'],
+    },
+    logoutDate: {
+        type: Date,
+        default: 0,
     },
     phone: {
         type: String,

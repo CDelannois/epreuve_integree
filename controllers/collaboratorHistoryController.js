@@ -1,4 +1,7 @@
+const Collaborator = require('../models/collaboratorModel');
 const CollaboratorHistory = require('./../models/collaboratorHistoryModel');
+const Function = require('./../models/functionModel');
+const Service = require('./../models/serviceModel');
 
 exports.getAllCollaboratorsHistory = async (req, res) => {
     try {
@@ -38,15 +41,55 @@ exports.getOneCollaboratorHistory = async (req, res) => {
 };
 
 exports.createCollaboratorHistory = async (req, res) => {
+    //Possible que si le collaborateur n'est pas déjà actif.
     try {
-        const newCollaboratorHistory = await CollaboratorHistory.create(req.body);
+        let service = await Service.findById(req.body.service);
+        if (service.virtual === true) {
+            const serviceID = service.services[0]
+            service = await Service.findById(serviceID);
+        };
+        const collaborator = await Collaborator.findById(req.body.collaborator);
+        const collaboratorFunction = collaborator.function;
 
-        res.status(201).json({
-            status: 'success',
-            data: {
-                collaboratorHistory: newCollaboratorHistory
+        if (service.level3.includes(collaboratorFunction)) {
+
+            const activeCollaborator = await CollaboratorHistory.find({
+                $and: [{
+                    collaborator: req.body.collaborator
+                }, {
+                    logoutDate: 0
+                }]
+            });
+            if (activeCollaborator.length > 0) {
+                res.status(201).json({
+                    status: 'cancelled',
+                    message: 'This collaborator is already active.',
+                });
+            } else {
+                const newCollaboratorHistory = await CollaboratorHistory.create(req.body)
+                const activeCollaborators = await Collaborator.findByIdAndUpdate(req.body.collaborator, { active: true })
+                const activeCollaboratorsCount = await Collaborator.find({
+                    $and: [{
+                        active: true
+                    }, {
+                        function: activeCollaborators.function
+                    }]
+                });
+                const update = { enabled: activeCollaboratorsCount.length };
+                await Function.findByIdAndUpdate(activeCollaborators.function, update);
+                res.status(201).json({
+                    status: 'success',
+                    data: {
+                        collaboratorHistory: newCollaboratorHistory
+                    }
+                });
             }
-        });
+        } else {
+            res.status(201).json({
+                status: 'cancelled',
+                message: `This collaborator isn't allowed in this service.`
+            })
+        }
     } catch (err) {
         res.status(400).json({
             status: 'fail',
