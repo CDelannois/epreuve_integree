@@ -43,7 +43,7 @@ const serviceSchema = new mongoose.Schema({
     },
     services: {
         type: [ObjectId],
-        required: [function () {
+        required: [() => {
             return this.virtual === true;
         },
             'Services ID required'],

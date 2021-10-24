@@ -15,26 +15,31 @@ const presenceSchema = new mongoose.Schema({
 
 const actageSchema = new mongoose.Schema({
     date: {
-        date: {
-            type: Date,
-            required: [true, 'Presence date required'],
-        },
-        users: {
-            type: ObjectId,
-            required: [true, 'Collaborator ID required'],
-        },
-        reason: {
-            type: String,
-            required: [true, 'Call reason required'],
-        },
-        _id: false,
-    }
+        type: Date,
+        required: [true, 'Presence date required'],
+        default: 0,
+    },
+    collaborator: {
+        type: ObjectId,
+        required: [true, 'Collaborator ID required'],
+        default: '0000a0a00a0aaa000a0a00aa',
+    },
+    reason: {
+        type: String,
+        required: [true, 'Call reason required'],
+        default: "",
+    },
+    _id: false,
 });
 
 const callHistorySchema = new mongoose.Schema({
-    date: {
+    beginDate: {
         type: Date,
         required: [true, 'Date required'],
+        default: Date.now,
+    },
+    endDate: {
+        type: Date,
     },
     room: {
         type: String,
@@ -53,6 +58,7 @@ const callHistorySchema = new mongoose.Schema({
     },
     actage: {
         type: actageSchema,
+        default: {},
     }
 });
 

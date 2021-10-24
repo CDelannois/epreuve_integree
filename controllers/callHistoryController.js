@@ -39,14 +39,33 @@ exports.getOneCallHistory = async (req, res) => {
 
 exports.createCallHistory = async (req, res) => {
     try {
-        const newCallHistory = await CallHistory.create(req.body);
-
-        res.status(201).json({
-            status: 'success',
-            data: {
-                callHistory: newCallHistory
-            }
+        //Tant qu'un appel est en cours dans la chambre, un .nouvel appel ne peut pas commencer.
+        const callHistory = await CallHistory.find({
+            $and: [{
+                room: req.body.room
+            },
+            {
+                actage: {
+                    collaborator: "0000a0a00a0aaa000a0a00aa"
+                }
+            }]
         });
+        if (callHistory.length > 0) {
+            res.status(201).json({
+                status: 'success',
+                message: 'A call is already pending for this room.',
+            });
+        }
+        else {
+            const newCallHistory = await CallHistory.create(req.body);
+            //Quand il est créé, il doit être référencé dans l'appel des soignants actifs dans ce service à ce moment.
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    callHistory: newCallHistory
+                }
+            });
+        }
     } catch (err) {
         console.log(req.body);
         res.status(400).json({
