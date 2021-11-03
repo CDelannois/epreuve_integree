@@ -2,8 +2,16 @@ const CallHistory = require('./../models/callHistoryModel');
 
 exports.getAllCallsHistory = async (req, res) => {
     try {
-        const callsHistory = await CallHistory.find()
-
+        const callsHistory = await CallHistory
+            .find()
+            .populate({
+                path: 'service',
+                select: 'name -_id'
+            })
+            .populate({
+                path: 'location',
+                select: 'name -_id'
+            });
         res.status(200).json({
             status: 'succes',
             results: callsHistory.length,
@@ -14,7 +22,7 @@ exports.getAllCallsHistory = async (req, res) => {
     } catch (err) {
         res.status(404).json({
             status: 'fail',
-            message: err
+            message: err + " "
         })
     }
 };

@@ -40,17 +40,20 @@ const callHistorySchema = new mongoose.Schema({
     },
     endDate: {
         type: Date,
+        default: Date.now
     },
     room: {
         type: String,
         required: [true, 'Room number required'],
     },
     location: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Button',
         required: [true, 'Button ID required']
     },
     service: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Service',
         required: [true, 'Service ID required']
     },
     presence: {
@@ -58,7 +61,6 @@ const callHistorySchema = new mongoose.Schema({
     },
     actage: {
         type: actageSchema,
-        default: {},
     }
 });
 
