@@ -34,10 +34,18 @@ exports.createButton = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
+
+        if (err.name === 'MongoError' && err.code === 11000) {
+            res.status(400).json({
+                status: 'fail',
+                message: 'This name or key is already used.'
+            })
+        } else {
+            res.status(400).json({
+                status: 'fail',
+                message: err
+            })
+        }
     }
 };
 
@@ -69,8 +77,8 @@ exports.deleteButton = async (req, res) => {
         const callHistory = await CallHistory.findOne({ location: req.params.id });
 
         if (callHistory) {
-            res.status(200).json({
-                status: 'stopped',
+            res.status(400).json({
+                status: 'fail',
                 message: `This button is used in another entry. It coudldn't be deleted.`
             });
         } else {

@@ -23,6 +23,9 @@ const collaboratorHistorySchema = new mongoose.Schema({
         type: ObjectId,
         required: [true, 'Service ID required'],
     },
+    calls: {
+        type: [ObjectId]
+    }
 });
 
 const CollaboratorHistory = mongoose.model('CollaboratorHistory', collaboratorHistorySchema);

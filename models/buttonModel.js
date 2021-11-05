@@ -4,6 +4,7 @@ const buttonSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Button name required'],
+        unique: true
     },
     tts: {
         type: String,

@@ -120,7 +120,7 @@ exports.deleteCollaborator = async (req, res) => {
             const idFunction = collaboratorFunction.function;
             await Collaborator.findByIdAndDelete(req.params.id);
             const functionTotal = await Function.findById(idFunction);
-            const update = { total: functionTotal.total - 1 };
+            const update = { total: functionTotal.length };
             await Function.findByIdAndUpdate(idFunction, update, { new: true });
             res.status(204).json({
                 status: 'succes'
