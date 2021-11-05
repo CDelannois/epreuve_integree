@@ -3,7 +3,11 @@ const CallHistory = require('./../models/callHistoryModel');
 
 exports.getAllButtons = async (req, res) => {
     try {
-        const buttons = await Button.find();
+        const buttons = await Button.aggregate([{
+            $project: {
+                __v: 0
+            }
+        }]);
         res.status(200).json({
             status: 'succes',
             results: buttons.length,

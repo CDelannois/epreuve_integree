@@ -2,7 +2,24 @@ const ServiceIntercom = require('./../models/serviceIntercomModel');
 
 exports.getAllServiceIntercoms = async (req, res) => {
     try {
-        const serviceIntercoms = await ServiceIntercom.find()
+        const serviceIntercoms = await ServiceIntercom.aggregate([{
+            $lookup: {
+                from: 'services',
+                localField: 'service',
+                foreignField: '_id',
+                as: 'service'
+            }
+        }, {
+            $unwind: '$service'
+        }, {
+            $addFields: {
+                service: "$service.name"
+            }
+        }, {
+            $project: {
+                __v: 0
+            }
+        }])
         res.status(200).json({
             status: 'succes',
             results: serviceIntercoms.length,

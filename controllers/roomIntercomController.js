@@ -2,7 +2,11 @@ const RoomIntercom = require('./../models/roomIntercomModel');
 
 exports.getAllRoomIntercoms = async (req, res) => {
     try {
-        const roomIntercoms = await RoomIntercom.find()
+        const roomIntercoms = await RoomIntercom.aggregate([{
+            $project: {
+                __v: 0
+            }
+        }])
 
         res.status(200).json({
             status: 'succes',

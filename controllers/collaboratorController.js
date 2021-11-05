@@ -5,7 +5,24 @@ const hash = require('./passwordHash');
 
 exports.getAllCollaborators = async (req, res) => {
     try {
-        const collaborators = await Collaborator.find()
+        const collaborators = await Collaborator.aggregate([{
+            $lookup: {
+                from: 'functions',
+                localField: 'function',
+                foreignField: '_id',
+                as: 'function'
+            }
+        }, {
+            $unwind: '$function'
+        }, {
+            $addFields: {
+                function: "$function.title"
+            }
+        }, {
+            $project: {
+                __v: 0
+            }
+        }])
 
         res.status(200).json({
             status: 'succes',

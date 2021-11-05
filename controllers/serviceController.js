@@ -5,7 +5,74 @@ const ServiceIntercom = require('./../models/serviceIntercomModel');
 
 exports.getAllServices = async (req, res) => {
     try {
-        const services = await Service.find()
+        const services = await Service.aggregate([
+            {
+                $lookup: {
+                    from: 'functions',
+                    localField: 'level1',
+                    foreignField: '_id',
+                    as: 'level1'
+                }
+            }, {
+                $lookup: {
+                    from: 'functions',
+                    localField: 'level2',
+                    foreignField: '_id',
+                    as: 'level2'
+                }
+            }, {
+                $lookup: {
+                    from: 'functions',
+                    localField: 'level3',
+                    foreignField: '_id',
+                    as: 'level3'
+                }
+            }, {
+                $unwind: '$level1'
+            }, {
+                $unwind: '$level2'
+            }, {
+                $unwind: '$level3'
+            }, {
+                $group: {
+                    _id: '$_id',
+                    level1: {
+                        $addToSet: '$level1.title',
+                    },
+                    level2: {
+                        $addToSet: '$level2.title'
+                    },
+                    level3: {
+                        $addToSet: '$level3.title'
+                    },
+                }
+            }, {
+                $lookup: {
+                    from: 'services',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'servicesDetails'
+                }
+            }, {
+                $unwind: {
+                    path: '$servicesDetails'
+                }
+            }, {
+                $addFields: {
+                    'servicesDetails.level1': '$level1',
+                    'servicesDetails.level2': '$level2',
+                    'servicesDetails.level3': '$level3',
+                }
+            }, {
+                $replaceRoot: {
+                    newRoot: '$servicesDetails'
+                }
+            }, {
+                $project: {
+                    __v: 0
+                }
+            }
+        ])
 
         res.status(200).json({
             status: 'succes',

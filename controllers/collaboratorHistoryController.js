@@ -5,7 +5,37 @@ const Service = require('./../models/serviceModel');
 
 exports.getAllCollaboratorsHistory = async (req, res) => {
     try {
-        const collaboratorsHistory = await CollaboratorHistory.find()
+        const collaboratorsHistory = await CollaboratorHistory.aggregate([{
+            $lookup: {
+                from: 'collaborators',
+                localField: 'collaborator',
+                foreignField: '_id',
+                as: 'collaborator'
+            }
+        }, {
+            $unwind: '$collaborator'
+        }, {
+            $addFields: {
+                collaborator: '$collaborator.name'
+            }
+        }, {
+            $lookup: {
+                from: 'services',
+                localField: 'service',
+                foreignField: '_id',
+                as: 'service'
+            }
+        }, {
+            $unwind: '$service'
+        }, {
+            $addFields: {
+                service: "$service.name"
+            }
+        },{
+            $project:{
+                __v:0
+            }
+        }])
 
         res.status(200).json({
             status: 'succes',

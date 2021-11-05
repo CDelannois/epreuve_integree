@@ -13,7 +13,7 @@ const collaboratorHistorySchema = new mongoose.Schema({
     },
     logoutDate: {
         type: Date,
-        default: 0,
+        default: Date.now,
     },
     phone: {
         type: String,

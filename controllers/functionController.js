@@ -4,7 +4,11 @@ const Service = require('./../models/serviceModel');
 
 exports.getAllFunctions = async (req, res) => {
     try {
-        const functions = await Function.find()
+        const functions = await Function.aggregate([{
+            $project: {
+                __v: 0
+            }
+        }])
 
         res.status(200).json({
             status: 'succes',

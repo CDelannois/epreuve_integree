@@ -3,7 +3,11 @@ const CallHistory = require('./../models/callHistoryModel');
 
 exports.getAllCares = async (req, res) => {
     try {
-        const cares = await Care.find()
+        const cares = await Care.aggregate([{
+            $project: {
+                __v: 0
+            }
+        }])
 
         res.status(200).json({
             status: 'succes',

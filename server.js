@@ -14,6 +14,7 @@ const functionRouter = require('./routes/functionRoutes');
 const roomIntercomRouter = require('./routes/roomIntercomRoutes');
 const serviceIntercomRouter = require('./routes/serviceIntercomRoutes');
 const serviceRouter = require('./routes/serviceRoutes');
+const virtualServiceRouter = require('./routes/virtualServiceRoutes')
 
 
 dotenv.config({ path: './config.env' });
@@ -43,6 +44,7 @@ app.use('/function', functionRouter);
 app.use('/roomIntercom', roomIntercomRouter);
 app.use('/serviceIntercom', serviceIntercomRouter);
 app.use('/service', serviceRouter);
+app.use('/virtualService', virtualServiceRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

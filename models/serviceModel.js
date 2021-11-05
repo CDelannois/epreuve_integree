@@ -7,10 +7,6 @@ const serviceSchema = new mongoose.Schema({
         required: [true, 'Service key required.'],
         unique: true,
     },
-    virtual: {
-        type: Boolean,
-        required: [true, 'Service type required.']
-    },
     name: {
         type: String,
         required: [true, 'Service name required.'],
@@ -40,13 +36,6 @@ const serviceSchema = new mongoose.Schema({
             return this.virtual === false;
         },
             'Level 3 functions ID required'],
-    },
-    services: {
-        type: [ObjectId],
-        required: [() => {
-            return this.virtual === true;
-        },
-            'Services ID required'],
     },
 });
 

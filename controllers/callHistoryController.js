@@ -3,15 +3,38 @@ const CallHistory = require('./../models/callHistoryModel');
 exports.getAllCallsHistory = async (req, res) => {
     try {
         const callsHistory = await CallHistory
-            .find()
-            .populate({
-                path: 'service',
-                select: 'name -_id'
-            })
-            .populate({
-                path: 'location',
-                select: 'name -_id'
-            });
+            .aggregate([{
+                $lookup: {
+                    from: 'services',
+                    localField: 'service',
+                    foreignField: '_id',
+                    as: 'service'
+                }
+            }, {
+                $unwind: '$service'
+            }, {
+                $addFields: {
+                    service: "$service.name"
+                }
+            }, {
+                $lookup: {
+                    from: 'buttons',
+                    localField: 'location',
+                    foreignField: '_id',
+                    as: 'location'
+                }
+            }, {
+                $unwind: '$location'
+            }, {
+                $addFields: {
+                    location: "$location.name"
+                }
+            }, {
+                $project: {
+                    __v: 0
+                }
+            }])
+
         res.status(200).json({
             status: 'succes',
             results: callsHistory.length,
