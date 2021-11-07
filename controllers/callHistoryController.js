@@ -62,7 +62,7 @@ exports.getAllCallsHistory = async (req, res) => {
         const callsHistory = await CallHistory.aggregate(finishedPipe);
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: callsHistory.length,
             data: {
                 callsHistory
@@ -95,7 +95,7 @@ exports.getCurrentCalls = async (req, res) => {
         const currentCalls = await CallHistory.aggregate(currentCallsPipe);
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: currentCalls.length,
             data: {
                 currentCalls
@@ -108,24 +108,6 @@ exports.getCurrentCalls = async (req, res) => {
         })
     }
 }
-
-exports.getOneCallHistory = async (req, res) => {
-    try {
-        const callHistory = await CallHistory.findById(req.params.id);
-
-        res.status(200).json({
-            status: 'succes',
-            data: {
-                callHistory
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
 
 exports.createCallHistory = async (req, res) => {
     try {
@@ -178,7 +160,7 @@ exports.updateCallHistory = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 callHistory: updatedCallHistory
             }
@@ -194,28 +176,43 @@ exports.updateCallHistory = async (req, res) => {
 
 exports.actCallHistory = async (req, res) => {
     try {
+        const collaboratorHistory = await CollaboratorHistory.findById(req.body.actage.collaborator);
         const callHistory = await CallHistory.findById(req.params.id);
-        if (new Date((callHistory.endDate)) > new Date(callHistory.beginDate)) {
+        if (new Date(callHistory.endDate) > new Date(callHistory.beginDate)) {
             res.status(404).json({
                 status: 'fail',
                 message: 'This call has already been acted.'
-            })
+            });
         } else {
-            req.body.endDate = Date.now();
-            req.body.actage.date = Date.now();
-            const actedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
-                new: true,
-                runValidators: true,
-            })
-            res.status(200).json({
-                status: 'succes',
-                data: {
-                    callHistory: actedCallHistory
-                }
-            })
+            if (new Date(collaboratorHistory.logoutDate) > new Date(collaboratorHistory.loginDate || collaboratorHistory.service != callHistory.service)) {
+                res.status(404).json({
+                    status: fail,
+                    message: 'This collaborator cannot act this call'
+                })
+            } else {
+                req.body.endDate = Date.now();
+                const actedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
+                    new: true,
+                    runValidators: true,
+                });
+                await CollaboratorHistory.findByIdAndUpdate(req.body.actage.collaborator, {
+                    $push: {
+                        actage: callHistory._id
+                    }
+                })
+                res.status(200).json({
+                    status: 'success',
+                    data: {
+                        callHistory: actedCallHistory
+                    },
+                })
+            }
         };
     } catch (err) {
-        console.log(err);
+        res.status(404).json({
+            status: 'fail',
+            message: err + ' '
+        })
     }
 }
 
@@ -224,7 +221,7 @@ exports.deleteCallHistory = async (req, res) => {
     try {
         await CallHistory.findByIdAndDelete(req.params.id)
         res.status(204).json({
-            status: 'succes'
+            status: 'success'
         })
     }
     catch (err) {

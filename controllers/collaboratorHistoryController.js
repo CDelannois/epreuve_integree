@@ -38,7 +38,7 @@ exports.getAllCollaboratorsHistory = async (req, res) => {
         }])
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: collaboratorsHistory.length,
             data: {
                 collaboratorsHistory
@@ -57,7 +57,7 @@ exports.getOneCollaboratorHistory = async (req, res) => {
         const collaboratorHistory = await CollaboratorHistory.findById(req.params.id);
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 collaboratorHistory
             }
@@ -135,7 +135,7 @@ exports.updateCollaboratorHistory = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 collaboratorHistory: updatedCollaboratorHistory
             }
@@ -154,7 +154,7 @@ exports.deleteCollaboratorHistory = async (req, res) => {
     try {
         await CollaboratorHistory.findByIdAndDelete(req.params.id)
         res.status(204).json({
-            status: 'succes'
+            status: 'success'
         })
     }
     catch (err) {

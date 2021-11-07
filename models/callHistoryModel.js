@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const actageSchema = new mongoose.Schema({
     date: {
         type: Date,
+        default: Date.now()
     },
     collaborator: {
         type: ObjectId,

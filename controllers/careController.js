@@ -10,7 +10,7 @@ exports.getAllCares = async (req, res) => {
         }])
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: cares.length,
             data: {
                 cares
@@ -49,7 +49,7 @@ exports.updateCare = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 care: updatedCare
             }
@@ -77,7 +77,7 @@ exports.deleteCare = async (req, res) => {
         } else {
             await Care.findByIdAndDelete(req.params.id)
             res.status(204).json({
-                status: 'succes'
+                status: 'success'
             })
         }
     }

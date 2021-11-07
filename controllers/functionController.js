@@ -11,7 +11,7 @@ exports.getAllFunctions = async (req, res) => {
         }])
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: functions.length,
             data: {
                 functions
@@ -50,7 +50,7 @@ exports.updateFunction = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 function: updatedFunction
             }
@@ -79,7 +79,7 @@ exports.deleteFunction = async (req, res) => {
         } else {
             await Function.findByIdAndDelete(req.params.id)
             res.status(204).json({
-                status: 'succes'
+                status: 'success'
             })
         }
     }

@@ -9,7 +9,7 @@ exports.getAllButtons = async (req, res) => {
             }
         }]);
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: buttons.length,
             data: {
                 buttons
@@ -56,7 +56,7 @@ exports.updateButton = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 button: updatedButton
             }
@@ -84,7 +84,7 @@ exports.deleteButton = async (req, res) => {
         } else {
             await Button.findByIdAndDelete(req.params.id)
             res.status(204).json({
-                status: 'succes'
+                status: 'success'
             })
         }
     }

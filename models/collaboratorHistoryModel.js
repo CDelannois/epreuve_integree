@@ -25,6 +25,9 @@ const collaboratorHistorySchema = new mongoose.Schema({
     },
     calls: {
         type: [ObjectId]
+    },
+    actage: {
+        type: [ObjectId]
     }
 });
 

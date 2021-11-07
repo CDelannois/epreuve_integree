@@ -25,7 +25,7 @@ exports.getAllCollaborators = async (req, res) => {
         }])
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: collaborators.length,
             data: {
                 collaborators
@@ -44,7 +44,7 @@ exports.getOneCollaborator = async (req, res) => {
         const collaborator = await Collaborator.findById(req.params.id);
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 collaborator
             }
@@ -89,7 +89,7 @@ exports.updateCollaborator = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 collaborator: updatedCollaborator
             }
@@ -123,7 +123,7 @@ exports.deleteCollaborator = async (req, res) => {
             const update = { total: functionTotal.length };
             await Function.findByIdAndUpdate(idFunction, update, { new: true });
             res.status(204).json({
-                status: 'succes'
+                status: 'success'
             })
         }
     }

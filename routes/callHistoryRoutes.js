@@ -15,7 +15,6 @@ router
 
 router
     .route('/:id')
-    .get(callHistoryController.getOneCallHistory)
     .patch(callHistoryController.updateCallHistory)
     .delete(callHistoryController.deleteCallHistory)
 

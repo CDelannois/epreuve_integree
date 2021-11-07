@@ -75,7 +75,7 @@ exports.getAllServices = async (req, res) => {
         ])
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: services.length,
             data: {
                 services
@@ -114,7 +114,7 @@ exports.updateService = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 service: updatedService
             }
@@ -143,7 +143,7 @@ exports.deleteService = async (req, res) => {
         } else {
             await Service.findByIdAndDelete(req.params.id)
             res.status(204).json({
-                status: 'succes'
+                status: 'success'
             })
         }
     }

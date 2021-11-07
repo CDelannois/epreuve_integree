@@ -9,7 +9,7 @@ exports.getAllRoomIntercoms = async (req, res) => {
         }])
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: roomIntercoms.length,
             data: {
                 roomIntercoms
@@ -48,7 +48,7 @@ exports.updateRoomIntercom = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 roomIntercom: updatedRoomIntercom
             }
@@ -67,7 +67,7 @@ exports.deleteRoomIntercom = async (req, res) => {
     try {
         await RoomIntercom.findByIdAndDelete(req.params.id)
         res.status(204).json({
-            status: 'succes'
+            status: 'success'
         })
     }
     catch (err) {

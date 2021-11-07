@@ -21,7 +21,7 @@ exports.getAllServiceIntercoms = async (req, res) => {
             }
         }])
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: serviceIntercoms.length,
             data: {
                 serviceIntercoms
@@ -60,7 +60,7 @@ exports.updateServiceIntercom = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 serviceIntercom: updatedServiceIntercom
             }
@@ -79,7 +79,7 @@ exports.deleteServiceIntercom = async (req, res) => {
     try {
         await ServiceIntercom.findByIdAndDelete(req.params.id)
         res.status(204).json({
-            status: 'succes'
+            status: 'success'
         })
     }
     catch (err) {

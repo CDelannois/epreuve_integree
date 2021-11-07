@@ -46,7 +46,7 @@ exports.getAllVirtualServices = async (req, res) => {
         }])
 
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             results: virtualServices.length,
             data: {
                 virtualServices
@@ -85,7 +85,7 @@ exports.updateVirtualService = async (req, res) => {
             runValidators: true,
         })
         res.status(200).json({
-            status: 'succes',
+            status: 'success',
             data: {
                 virtualService: updatedVirtualService
             }
@@ -113,7 +113,7 @@ exports.deleteVirtualService = async (req, res) => {
         } else {
             await VirtualService.findByIdAndDelete(req.params.id)
             res.status(204).json({
-                status: 'succes'
+                status: 'success'
             })
         }
     }
