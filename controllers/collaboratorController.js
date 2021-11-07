@@ -1,7 +1,6 @@
 const Collaborator = require('./../models/collaboratorModel');
 const Function = require('./../models/functionModel');
 const CollaboratorHistory = require('./../models/collaboratorHistoryModel');
-const hash = require('./passwordHash');
 
 exports.getAllCollaborators = async (req, res) => {
     try {
@@ -58,7 +57,6 @@ exports.getOneCollaborator = async (req, res) => {
 };
 
 exports.createCollaborator = async (req, res) => {
-    req.body.password = hash(req.body.password);
     try {
         const newCollaborator = await Collaborator.create(req.body);
         const functionTotal = await Collaborator.find({ function: req.body.function });

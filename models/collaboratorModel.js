@@ -1,5 +1,6 @@
 const { ObjectId } = require('bson');
 const mongoose = require('mongoose');
+const hash = require('./passwordHash');
 
 const collaboratorSchema = new mongoose.Schema({
     status: {
@@ -33,12 +34,22 @@ const collaboratorSchema = new mongoose.Schema({
         },
         required: [true, `Collaborator's mail address is required.`],
         unique: true,
+        lowercase: true,
     },
     active: {
         type: Boolean,
         required: [true, `Collaborator's active status is required.`],
         default: false,
     },
+});
+
+collaboratorSchema.pre('save', function (next) {
+//Si on crée/modifie le mot de passe, il est hashé. Sinon rien ne se passe au niveau du hash.
+    if (!this.isModified('password')) {
+        return next();
+    }
+    this.password = hash(this.password);
+    next();
 });
 
 const Collaborator = mongoose.model('Collaborator', collaboratorSchema);
