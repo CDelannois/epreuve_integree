@@ -4,10 +4,6 @@ const hash = require('./passwordHash');
 const bcrypt = require('bcrypt');
 
 const collaboratorSchema = new mongoose.Schema({
-    status: {
-        type: Boolean,
-        required: [true, 'Collaborator status required.'],
-    },
     name: {
         type: String,
         required: [true, `Collaborator's name is required.`],
@@ -43,6 +39,7 @@ const collaboratorSchema = new mongoose.Schema({
         required: [true, `Collaborator's active status is required.`],
         default: false,
     },
+    passwordChangedAt: Date
 });
 
 collaboratorSchema.pre('save', function (next) {
@@ -56,7 +53,16 @@ collaboratorSchema.pre('save', function (next) {
 
 collaboratorSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
-}
+};
+
+collaboratorSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+    if (this.passwordChangedAt) {
+        const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10)
+        return JWTTimestamp < changedTimestamp;
+    }
+
+    return false;
+};
 
 const Collaborator = mongoose.model('Collaborator', collaboratorSchema);
 

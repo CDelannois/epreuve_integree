@@ -1,5 +1,6 @@
 const express = require('express');
-const callHistoryController = require('../controllers/callHistoryController');
+const callHistoryController = require('./../controllers/callHistoryController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router
 
 router
     .route('/')
-    .get(callHistoryController.getAllCallsHistory)
+    .get(authController.protect, callHistoryController.getAllCallsHistory)
     .post(callHistoryController.createCallHistory)
 
 router
