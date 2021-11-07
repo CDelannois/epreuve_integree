@@ -19,7 +19,8 @@ exports.getAllCollaborators = async (req, res) => {
             }
         }, {
             $project: {
-                __v: 0
+                __v: 0,
+                password: 0
             }
         }])
 

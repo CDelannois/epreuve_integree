@@ -1,6 +1,7 @@
 const { ObjectId } = require('bson');
 const mongoose = require('mongoose');
 const hash = require('./passwordHash');
+const bcrypt = require('bcrypt');
 
 const collaboratorSchema = new mongoose.Schema({
     status: {
@@ -22,12 +23,13 @@ const collaboratorSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Collaborator pin code required.'],
+        select: false
     },
     timeBeforeDisconnect: {
         type: Number,
         required: [true, 'Time before automatic disconnection is required.']
     },
-    mail: {
+    email: {
         type: String,
         validate: function (mailInput) {
             return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mailInput);
@@ -44,13 +46,17 @@ const collaboratorSchema = new mongoose.Schema({
 });
 
 collaboratorSchema.pre('save', function (next) {
-//Si on crée/modifie le mot de passe, il est hashé. Sinon rien ne se passe au niveau du hash.
+    //Si on crée/modifie le mot de passe, il est hashé. Sinon rien ne se passe au niveau du hash.
     if (!this.isModified('password')) {
         return next();
     }
     this.password = hash(this.password);
     next();
 });
+
+collaboratorSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+}
 
 const Collaborator = mongoose.model('Collaborator', collaboratorSchema);
 
