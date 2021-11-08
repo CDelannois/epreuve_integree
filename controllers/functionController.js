@@ -2,91 +2,72 @@ const Function = require('./../models/functionModel');
 const Collaborator = require('./../models/collaboratorModel');
 const Service = require('./../models/serviceModel');
 
-exports.getAllFunctions = async (req, res) => {
-    try {
-        const functions = await Function.aggregate([{
-            $project: {
-                __v: 0
-            }
-        }])
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
-        res.status(200).json({
-            status: 'success',
-            results: functions.length,
-            data: {
-                functions
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+exports.getAllFunctions = catchAsync(async (req, res, next) => {
 
-exports.createFunction = async (req, res) => {
-    try {
-        const newFunction = await Function.create(req.body);
-
-        res.status(201).json({
-            status: 'success',
-            data: {
-                function: newFunction
-            }
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
-
-exports.updateFunction = async (req, res) => {
-    try {
-        const updatedFunction = await Function.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        })
-        res.status(200).json({
-            status: 'success',
-            data: {
-                function: updatedFunction
-            }
-        })
-    }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
-
-exports.deleteFunction = async (req, res) => {
-
-    try {
-        // Avant la suppression, vérifier collaborateur et service.
-        const collaborator = await Collaborator.findOne({ function: req.params.id });
-        const service = await Service.findOne({ level3: req.params.id });
-
-        if (collaborator || service) {
-            res.status(200).json({
-                status: 'stopped',
-                message: `This function is used in another entry. It coudldn't be deleted.`
-            });
-        } else {
-            await Function.findByIdAndDelete(req.params.id)
-            res.status(204).json({
-                status: 'success'
-            })
+    const functions = await Function.aggregate([{
+        $project: {
+            __v: 0
         }
+    }])
+
+    res.status(200).json({
+        status: 'success',
+        results: functions.length,
+        data: {
+            functions
+        }
+    })
+});
+
+exports.createFunction = catchAsync(async (req, res, next) => {
+    const newFunction = await Function.create(req.body);
+
+    res.status(201).json({
+        status: 'success',
+        data: {
+            function: newFunction
+        }
+    });
+});
+
+exports.updateFunction = catchAsync(async (req, res, next) => {
+    const updatedFunction = await Function.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    })
+
+    if (!updatedFunction) {
+        return next(new AppError('This function does not exist.', 404));
     }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            function: updatedFunction
+        }
+    })
+});
+
+exports.deleteFunction = catchAsync(async (req, res, next) => {
+
+    // Avant la suppression, vérifier collaborateur et service.
+    const collaborator = await Collaborator.findOne({ function: req.params.id });
+    const service = await Service.findOne({ level3: req.params.id });
+
+    if (collaborator || service) {
+        return next(new AppError('This function is used somewhere else.', 400));
     }
-};
+
+    const deletedFunction = await Function.findByIdAndDelete(req.params.id)
+
+    if (!deletedFunction) {
+        return next(new AppError('This function does not exist.', 404));
+    }
+
+    res.status(204).json({
+        status: 'success'
+    })
+});

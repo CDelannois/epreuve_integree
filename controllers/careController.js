@@ -1,90 +1,70 @@
 const Care = require('./../models/careModel');
 const CallHistory = require('./../models/callHistoryModel');
 
-exports.getAllCares = async (req, res) => {
-    try {
-        const cares = await Care.aggregate([{
-            $project: {
-                __v: 0
-            }
-        }])
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
-        res.status(200).json({
-            status: 'success',
-            results: cares.length,
-            data: {
-                cares
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+exports.getAllCares = catchAsync(async (req, res, next) => {
+    const cares = await Care.aggregate([{
+        $project: {
+            __v: 0
+        }
+    }])
+
+    res.status(200).json({
+        status: 'success',
+        results: cares.length,
+        data: {
+            cares
+        }
+    })
+});
+
+exports.createCare = catchAsync(async (req, res, next) => {
+    const newCare = await Care.create(req.body);
+
+    res.status(201).json({
+        status: 'success',
+        data: {
+            care: newCare
+        }
+    });
+});
+
+exports.updateCare = catchAsync(async (req, res, next) => {
+    const updatedCare = await Care.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    })
+
+    if (!updatedCare) {
+        return next(new AppError(`This care does not exist.`, 404));
     }
-};
 
-exports.createCare = async (req, res) => {
-    try {
-        const newCare = await Care.create(req.body);
+    res.status(200).json({
+        status: 'success',
+        data: {
+            care: updatedCare
+        }
+    })
+});
 
-        res.status(201).json({
-            status: 'success',
-            data: {
-                care: newCare
-            }
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
-
-exports.updateCare = async (req, res) => {
-    try {
-        const updatedCare = await Care.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        })
-        res.status(200).json({
-            status: 'success',
-            data: {
-                care: updatedCare
-            }
-        })
-    }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
-
-exports.deleteCare = async (req, res) => {
+exports.deleteCare = catchAsync(async (req, res, next) => {
 
     //Avant la suppression, vérifier historique appel
-    try {
-        const callHistory = await CallHistory.findOne({ service: req.params.id });
+    const callHistory = await CallHistory.findOne({ location: req.params.id });
 
-        if (callHistory.length > 0) {
-            res.status(200).json({
-                status: 'stopped',
-                message: `This care is used in another entry. It coudldn't be deleted.`
-            });
-        } else {
-            await Care.findByIdAndDelete(req.params.id)
-            res.status(204).json({
-                status: 'success'
-            })
-        }
+    if (callHistory) {
+        return next(new AppError(`This care is used somewhere else.`, 400));
     }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+
+    const deletedCare = await Care.findByIdAndDelete(req.params.id)
+
+    if (!deletedCare) {
+        return next(new AppError(`This care does not exist.`, 404));
     }
-};
+
+    res.status(204).json({
+        status: 'success'
+    })
+});

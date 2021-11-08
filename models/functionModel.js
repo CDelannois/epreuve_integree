@@ -4,6 +4,7 @@ const functionSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, 'Function title required.'],
+        unique: true,
     },
     total: {
         type: Number,

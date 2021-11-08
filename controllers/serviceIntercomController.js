@@ -1,91 +1,87 @@
 const ServiceIntercom = require('./../models/serviceIntercomModel');
+const Service = require('./../models/serviceModel');
 
-exports.getAllServiceIntercoms = async (req, res) => {
-    try {
-        const serviceIntercoms = await ServiceIntercom.aggregate([{
-            $lookup: {
-                from: 'services',
-                localField: 'service',
-                foreignField: '_id',
-                as: 'service'
-            }
-        }, {
-            $unwind: '$service'
-        }, {
-            $addFields: {
-                service: "$service.name"
-            }
-        }, {
-            $project: {
-                __v: 0
-            }
-        }])
-        res.status(200).json({
-            status: 'success',
-            results: serviceIntercoms.length,
-            data: {
-                serviceIntercoms
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
-exports.createServiceIntercom = async (req, res) => {
-    try {
-        const newServiceIntercom = await ServiceIntercom.create(req.body);
+exports.getAllServiceIntercoms = catchAsync(async (req, res, next) => {
+    const serviceIntercoms = await ServiceIntercom.aggregate([{
+        $lookup: {
+            from: 'services',
+            localField: 'service',
+            foreignField: '_id',
+            as: 'service'
+        }
+    }, {
+        $unwind: '$service'
+    }, {
+        $addFields: {
+            service: "$service.name"
+        }
+    }, {
+        $project: {
+            __v: 0
+        }
+    }])
+    res.status(200).json({
+        status: 'success',
+        results: serviceIntercoms.length,
+        data: {
+            serviceIntercoms
+        }
+    })
+});
 
-        res.status(201).json({
-            status: 'success',
-            data: {
-                serviceIntercom: newServiceIntercom
-            }
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+exports.createServiceIntercom = catchAsync(async (req, res, next) => {
+    const service = await Service.findById(req.body.service);
 
-exports.updateServiceIntercom = async (req, res) => {
-    try {
-        const updatedServiceIntercom = await ServiceIntercom.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        })
-        res.status(200).json({
-            status: 'success',
-            data: {
-                serviceIntercom: updatedServiceIntercom
-            }
-        })
+    if (!service) {
+        return next(new AppError('This service does not exist.', 404));
     }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
 
-exports.deleteServiceIntercom = async (req, res) => {
+    const newServiceIntercom = await ServiceIntercom.create(req.body);
 
-    try {
-        await ServiceIntercom.findByIdAndDelete(req.params.id)
-        res.status(204).json({
-            status: 'success'
-        })
+    res.status(201).json({
+        status: 'success',
+        data: {
+            serviceIntercom: newServiceIntercom
+        }
+    });
+});
+
+exports.updateServiceIntercom = catchAsync(async (req, res, next) => {
+    if (req.body.service) {
+        const service = await Service.findById(req.body.service);
+        if (!service) {
+            return next(new AppError('This service does not exist.', 404));
+        }
     }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+
+    const updatedServiceIntercom = await ServiceIntercom.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    });
+
+    if (!updatedServiceIntercom) {
+        return next(new AppError('This service intercom does not exist.', 404));
     }
-};
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            serviceIntercom: updatedServiceIntercom
+        }
+    })
+});
+
+exports.deleteServiceIntercom = catchAsync(async (req, res, next) => {
+    const deletedServiceIntercom = await ServiceIntercom.findByIdAndDelete(req.params.id)
+
+    if (!deletedServiceIntercom) {
+        return next(new AppError('This service intercom does not exist.'));
+    }
+
+    res.status(204).json({
+        status: 'success'
+    })
+});

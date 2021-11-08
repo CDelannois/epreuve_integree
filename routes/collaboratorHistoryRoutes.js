@@ -10,7 +10,6 @@ router
 
 router
     .route('/:id')
-    .get(collaboratorHistoryController.getOneCollaboratorHistory)
     .patch(collaboratorHistoryController.updateCollaboratorHistory)
     .delete(collaboratorHistoryController.deleteCollaboratorHistory)
 

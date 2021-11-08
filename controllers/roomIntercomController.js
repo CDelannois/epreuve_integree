@@ -1,79 +1,62 @@
 const RoomIntercom = require('./../models/roomIntercomModel');
 
-exports.getAllRoomIntercoms = async (req, res) => {
-    try {
-        const roomIntercoms = await RoomIntercom.aggregate([{
-            $project: {
-                __v: 0
-            }
-        }])
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
-        res.status(200).json({
-            status: 'success',
-            results: roomIntercoms.length,
-            data: {
-                roomIntercoms
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+exports.getAllRoomIntercoms = catchAsync(async (req, res, next) => {
 
-exports.createRoomIntercom = async (req, res) => {
-    try {
-        const newRoomIntercom = await RoomIntercom.create(req.body);
+    const roomIntercoms = await RoomIntercom.aggregate([{
+        $project: {
+            __v: 0
+        }
+    }])
 
-        res.status(201).json({
-            status: 'success',
-            data: {
-                roomIntercom: newRoomIntercom
-            }
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+    res.status(200).json({
+        status: 'success',
+        results: roomIntercoms.length,
+        data: {
+            roomIntercoms
+        }
+    })
+});
 
-exports.updateRoomIntercom = async (req, res) => {
-    try {
-        const updatedRoomIntercom = await RoomIntercom.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        })
-        res.status(200).json({
-            status: 'success',
-            data: {
-                roomIntercom: updatedRoomIntercom
-            }
-        })
-    }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+exports.createRoomIntercom = catchAsync(async (req, res, next) => {
+    const newRoomIntercom = await RoomIntercom.create(req.body);
 
-exports.deleteRoomIntercom = async (req, res) => {
+    res.status(201).json({
+        status: 'success',
+        data: {
+            roomIntercom: newRoomIntercom
+        }
+    });
+});
 
-    try {
-        await RoomIntercom.findByIdAndDelete(req.params.id)
-        res.status(204).json({
-            status: 'success'
-        })
+exports.updateRoomIntercom = catchAsync(async (req, res, next) => {
+    const updatedRoomIntercom = await RoomIntercom.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    });
+
+    if (!updatedRoomIntercom) {
+        return next(new AppError('This room intercom does not exist.', 404));
     }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            roomIntercom: updatedRoomIntercom
+        }
+    });
+});
+
+exports.deleteRoomIntercom = catchAsync(async (req, res, next) => {
+    const deletedRoomIntercom = await RoomIntercom.findByIdAndDelete(req.params.id);
+
+    if (!deletedRoomIntercom) {
+        return next(new AppError('This room intercom does not exist.', 404));
     }
-};
+
+    res.status(204).json({
+        status: 'success'
+    })
+});

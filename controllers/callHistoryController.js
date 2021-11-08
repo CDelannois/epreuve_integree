@@ -1,5 +1,10 @@
 const CallHistory = require('./../models/callHistoryModel');
 const CollaboratorHistory = require('./../models/collaboratorHistoryModel');
+const Service = require('./../models/serviceModel');
+const Button = require('./../models/buttonModel');
+
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 const basePipe = [{
     $lookup: {
@@ -57,24 +62,17 @@ const finish = [{
 
 const finishedPipe = basePipe.concat(finish);
 
-exports.getAllCallsHistory = async (req, res) => {
-    try {
-        const callsHistory = await CallHistory.aggregate(finishedPipe);
+exports.getAllCallsHistory = catchAsync(async (req, res, next) => {
+    const callsHistory = await CallHistory.aggregate(finishedPipe);
 
-        res.status(200).json({
-            status: 'success',
-            results: callsHistory.length,
-            data: {
-                callsHistory
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err + " "
-        })
-    }
-};
+    res.status(200).json({
+        status: 'success',
+        results: callsHistory.length,
+        data: {
+            callsHistory
+        }
+    })
+});
 
 const match = [{
     $match: { endDate: new Date(0) }
@@ -90,144 +88,149 @@ const current = [{
 let currentCallsPipe = match.concat(basePipe);
 currentCallsPipe = currentCallsPipe.concat(current);
 
-exports.getCurrentCalls = async (req, res) => {
-    try {
-        const currentCalls = await CallHistory.aggregate(currentCallsPipe);
+exports.getCurrentCalls = catchAsync(async (req, res, next) => {
+    const currentCalls = await CallHistory.aggregate(currentCallsPipe);
 
-        res.status(200).json({
-            status: 'success',
-            results: currentCalls.length,
-            data: {
-                currentCalls
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err + " "
-        })
-    }
-}
-
-exports.createCallHistory = async (req, res) => {
-    try {
-        //Tant qu'un appel est en cours dans la chambre, un nouvel appel ne peut pas commencer.
-        const callHistory = await CallHistory.find({
-            $and: [{
-                room: req.body.room
-            }, {
-                endDate: 0
-            }]
-        });
-        if (callHistory.length > 0) {
-            res.status(400).json({
-                status: 'fail',
-                message: 'A call is already pending for this room.',
-            });
+    res.status(200).json({
+        status: 'success',
+        results: currentCalls.length,
+        data: {
+            currentCalls
         }
-        else {
-            const newCallHistory = await CallHistory.create(req.body);
-            await CollaboratorHistory.updateMany({
-                $and: [{
-                    service: req.body.service
-                }, {
-                    logoutDate: new Date(0)
-                }]
-            }, {
-                $push: {
-                    calls: newCallHistory._id
-                }
-            });
-            res.status(201).json({
-                status: 'success',
-                data: {
-                    callHistory: newCallHistory
-                }
-            });
+    })
+});
+
+exports.createCallHistory = catchAsync(async (req, res, next) => {
+    //Tant qu'un appel est en cours dans la chambre, un nouvel appel ne peut pas commencer.
+    const callHistory = await CallHistory.find({
+        $and: [{
+            room: req.body.room
+        }, {
+            endDate: 0
+        }]
+    });
+    if (callHistory.length > 0) {
+        return next(new AppError('There is already a call pending.', 400));
+    }
+
+    const location = await Button.findById(req.body.location);
+
+    if (!location) {
+        return next(new AppError(`This button does not exist`, 404));
+    }
+
+    const service = await Service.findById(req.body.service);
+
+    if (!service) {
+        return next(new AppError(`This service does not exist`, 404));
+    }
+
+    const newCallHistory = await CallHistory.create(req.body);
+
+    //Ajout de l'appel pour les soignants actifs dans le service.
+    await CollaboratorHistory.updateMany({
+        $and: [{
+            service: req.body.service
+        }, {
+            logoutDate: new Date(0)
+        }]
+    }, {
+        $push: {
+            calls: newCallHistory._id
         }
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err + ' '
-        })
-    }
-};
+    });
+    res.status(201).json({
+        status: 'success',
+        data: {
+            callHistory: newCallHistory
+        }
+    });
+});
 
-exports.updateCallHistory = async (req, res) => {
-    try {
-        const updatedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        })
-        res.status(200).json({
-            status: 'success',
-            data: {
-                callHistory: updatedCallHistory
-            }
-        })
-    }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+exports.updateCallHistory = catchAsync(async (req, res, next) => {
+    const updatedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    })
 
-exports.actCallHistory = async (req, res) => {
-    try {
-        const collaboratorHistory = await CollaboratorHistory.findById(req.body.actage.collaborator);
-        const callHistory = await CallHistory.findById(req.params.id);
-        if (new Date(callHistory.endDate) > new Date(callHistory.beginDate)) {
-            res.status(404).json({
-                status: 'fail',
-                message: 'This call has already been acted.'
-            });
-        } else {
-            if (new Date(collaboratorHistory.logoutDate) > new Date(collaboratorHistory.loginDate || collaboratorHistory.service != callHistory.service)) {
-                res.status(404).json({
-                    status: fail,
-                    message: 'This collaborator cannot act this call'
-                })
-            } else {
-                req.body.endDate = Date.now();
-                const actedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
-                    new: true,
-                    runValidators: true,
-                });
-                await CollaboratorHistory.findByIdAndUpdate(req.body.actage.collaborator, {
-                    $push: {
-                        actage: callHistory._id
-                    }
-                })
-                res.status(200).json({
-                    status: 'success',
-                    data: {
-                        callHistory: actedCallHistory
-                    },
-                })
-            }
-        };
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err + ' '
-        })
+    if (!updatedCallHistory) {
+        return next(new AppError(`This call does not exist.`, 404));
     }
-}
 
-exports.deleteCallHistory = async (req, res) => {
+    if (req.body.location) {
+        const button = await Button.findById(req.body.location);
+        if (!button) {
+            return next(new AppError('This button does not exist.', 404));
+        }
+    }
 
-    try {
-        await CallHistory.findByIdAndDelete(req.params.id)
-        res.status(204).json({
-            status: 'success'
-        })
+    if (req.body.service) {
+        const service = await Service.findById(req.body.service);
+        if (!service) {
+            return next(new AppError('This service does not exist.', 404));
+        }
     }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            callHistory: updatedCallHistory
+        }
+    })
+});
+
+exports.actCallHistory = catchAsync(async (req, res, next) => {
+    const callHistory = await CallHistory.findById(req.params.id);
+
+    //Si l'appel n'existe pas ==> erreur
+    if (!callHistory) {
+        return next(new AppError(`This call does not exist.`, 404));
     }
-};
+
+    //Si l'appel est fini ==> erreur
+    if (new Date(callHistory.endDate) > new Date(callHistory.beginDate)) {
+        return next(new AppError('This call has already ended.', 400));
+    }
+
+    const collaboratorHistory = await CollaboratorHistory.findById(req.body.actage.collaborator);
+
+    //Si le collaborateur n'existe pas ==> erreur
+    if (!collaboratorHistory) {
+        return next(new AppError(`This collaborator does not exist.`), 404);
+    }
+
+    //Si le soignant n'est pas actif ou pas autorisé dans le service ==> erreur
+    if (new Date(collaboratorHistory.logoutDate) > new Date(collaboratorHistory.loginDate || collaboratorHistory.service != callHistory.service)) {
+        return next(new AppError('Collaborator not allowed to act in this service.'), 401);
+    }
+
+    req.body.endDate = Date.now();
+    const actedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    });
+
+    await CollaboratorHistory.findByIdAndUpdate(req.body.actage.collaborator, {
+        $push: {
+            actage: callHistory._id
+        }
+    })
+    res.status(200).json({
+        status: 'success',
+        data: {
+            callHistory: actedCallHistory
+        },
+    })
+});
+
+exports.deleteCallHistory = catchAsync(async (req, res, next) => {
+    const callHistory = await CallHistory.findByIdAndDelete(req.params.id)
+
+    if (!callHistory) {
+        return next(new AppError(`This call does not exist.`), 404);
+    }
+
+    res.status(204).json({
+        status: 'success'
+    })
+});

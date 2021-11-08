@@ -13,7 +13,6 @@ router
 
 router
     .route('/:id')
-    .get(collaboratorController.getOneCollaborator)
     .patch(collaboratorController.updateCollaborator)
     .delete(collaboratorController.deleteCollaborator)
 
