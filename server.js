@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const app = express();
 
 const buttonRouter = require('./routes/buttonRoutes');
@@ -15,7 +14,6 @@ const roomIntercomRouter = require('./routes/roomIntercomRoutes');
 const serviceIntercomRouter = require('./routes/serviceIntercomRoutes');
 const serviceRouter = require('./routes/serviceRoutes');
 const virtualServiceRouter = require('./routes/virtualServiceRoutes')
-
 
 dotenv.config({ path: './config.env' });
 
