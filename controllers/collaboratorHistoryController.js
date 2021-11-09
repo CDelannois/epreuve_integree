@@ -1,5 +1,6 @@
 const Collaborator = require('../models/collaboratorModel');
 const CollaboratorHistory = require('./../models/collaboratorHistoryModel');
+const CallHistory = require('./../models/callHistoryModel');
 const Function = require('./../models/functionModel');
 const Service = require('./../models/serviceModel');
 const VirtualService = require('./../models/virtualServiceModel');
@@ -81,7 +82,9 @@ exports.getActiveCollaboratorsHistory = catchAsync(async (req, res, next) => {
 
 exports.createCollaboratorHistory = catchAsync(async (req, res, next) => {
 
+    //Récupération de l'id du soignant grâce au token.
     req.body.collaborator = req.collaborator._id;
+
     //Possible que si le collaborateur n'est pas déjà actif.
     let service = await Service.findById(req.body.service);
 
@@ -94,6 +97,7 @@ exports.createCollaboratorHistory = catchAsync(async (req, res, next) => {
         service = await Service.findById(serviceID);
     }
 
+    //Vérification: le soignant est-il autorisé dans le service où il essaye de se connecter?
     const collaborator = await Collaborator.findById(req.body.collaborator);
     const collaboratorFunction = collaborator.function;
 
@@ -112,6 +116,15 @@ exports.createCollaboratorHistory = catchAsync(async (req, res, next) => {
     if (activeCollaborator.length > 0) {
         return next(new AppError(`This collaborator is already active.`, 400));
     }
+
+    //Récupération et ajout des appels déjà en cours lorsqu'un collaborateur commence à travailler.
+    req.body.calls = [];
+    const currentCalls = await CallHistory.find({ service: req.body.service, endDate: new Date(0) });
+
+    currentCalls.forEach(el => {
+        req.body.calls.push(el._id);
+    });
+
 
     const newCollaboratorHistory = await CollaboratorHistory.create(req.body)
     const activeCollaborators = await Collaborator.findByIdAndUpdate(req.body.collaborator, { active: true })
