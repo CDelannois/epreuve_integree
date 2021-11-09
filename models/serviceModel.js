@@ -15,6 +15,7 @@ const serviceSchema = new mongoose.Schema({
     absentPhone: {
         type: String,
         required: [true, 'Service absent phone number required.'],
+        unique: true,
     },
     level1: {
         type: [ObjectId],

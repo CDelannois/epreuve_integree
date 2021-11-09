@@ -70,7 +70,7 @@ exports.restrictTo = (...functions) => {
     return async (req, res, next) => {
         const collaboratorFunction = await Function.findById(req.collaborator.function);
         if (!functions.includes(collaboratorFunction.title)) {
-            return next(new AppError(`You're not allowed to do that! ` + collaboratorFunction.title, 403));
+            return next(new AppError(`You are not allowed to do that! `, 403));
         }
         next();
     }

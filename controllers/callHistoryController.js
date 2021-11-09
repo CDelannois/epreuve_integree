@@ -5,6 +5,7 @@ const Button = require('./../models/buttonModel');
 
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const Collaborator = require('../models/collaboratorModel');
 
 const basePipe = [{
     $lookup: {
@@ -180,6 +181,8 @@ exports.updateCallHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.actCallHistory = catchAsync(async (req, res, next) => {
+    req.body.actage.collaborator = req.collaborator._id;
+    console.log(req.body);
     const callHistory = await CallHistory.findById(req.params.id);
 
     //Si l'appel n'existe pas ==> erreur
@@ -192,7 +195,7 @@ exports.actCallHistory = catchAsync(async (req, res, next) => {
         return next(new AppError('This call has already ended.', 400));
     }
 
-    const collaboratorHistory = await CollaboratorHistory.findById(req.body.actage.collaborator);
+    const collaboratorHistory = await CollaboratorHistory.find({ collaborator: req.collaborator._id, logoutDate: new Date(0) });
 
     //Si le collaborateur n'existe pas ==> erreur
     if (!collaboratorHistory) {
@@ -210,7 +213,7 @@ exports.actCallHistory = catchAsync(async (req, res, next) => {
         runValidators: true,
     });
 
-    await CollaboratorHistory.findByIdAndUpdate(req.body.actage.collaborator, {
+    await CollaboratorHistory.findByIdAndUpdate(collaboratorHistory[0]._id, {
         $push: {
             actage: callHistory._id
         }

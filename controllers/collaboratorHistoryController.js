@@ -84,6 +84,8 @@ exports.getActiveCollaboratorsHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.createCollaboratorHistory = catchAsync(async (req, res, next) => {
+
+    req.body.collaborator = req.collaborator._id;
     //Possible que si le collaborateur n'est pas déjà actif.
     let service = await Service.findById(req.body.service);
 
@@ -97,11 +99,6 @@ exports.createCollaboratorHistory = catchAsync(async (req, res, next) => {
     }
 
     const collaborator = await Collaborator.findById(req.body.collaborator);
-
-    if (!collaborator) {
-        return next(new AppError(`This collaborator does not exist.`, 404));
-    }
-
     const collaboratorFunction = collaborator.function;
 
     if (!service.level3.includes(collaboratorFunction)) {
@@ -158,19 +155,20 @@ exports.updateCollaboratorHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.endWork = catchAsync(async (req, res, next) => {
-    const endWork = await CollaboratorHistory.findById(req.params.id);
+
+    const endWork = await CollaboratorHistory.find({ collaborator: req.collaborator._id, logoutDate: new Date(0) });
 
     if (!endWork) {
         return next(new AppError('This collaborator entry does not exist.', 404));
     }
 
-    if (endWork.logoutDate > endWork.loginDate) {
+    if (endWork[0].logoutDate > endWork[0].loginDate) {
         return next(new AppError('This collaborator entry has already ended.', 400));
     }
 
     //Mise à jour de la date de fin de travail.
     const updateCollaboratorHistory = { logoutDate: Date.now() };
-    const updatedCollaboratorHistory = await CollaboratorHistory.findByIdAndUpdate(req.params.id, updateCollaboratorHistory);
+    const updatedCollaboratorHistory = await CollaboratorHistory.findByIdAndUpdate(endWork[0]._id, updateCollaboratorHistory);
 
     //Mise à jour du statut du collaborateur.
     const updateCollaborator = { active: false };
@@ -183,7 +181,7 @@ exports.endWork = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: "success",
-        message: updatedCollaborator.name + " logged out. Currently" + activeFunction.length + " active " + enabledFunction.title + "."
+        message: updatedCollaborator.name + " logged out. Currently " + activeFunction.length + " active " + enabledFunction.title + "."
     })
 
 });

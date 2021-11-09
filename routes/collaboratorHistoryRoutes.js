@@ -6,16 +6,13 @@ const authController = require('./../controllers/authController');
 const router = express.Router();
 
 router
+    .route('/end')
+    .patch(authController.protect, collaboratorHistoryController.endWork);
+
+router
     .route('/')
     .get(authController.protect, collaboratorHistoryController.getAllCollaboratorsHistory)
-    .post(
-        authController.protect,
-        authController.restrictTo(
-            'Directeur',
-            'Administratif',
-            'Chef-infirmier'),
-        collaboratorHistoryController.createCollaboratorHistory
-    )
+    .post(authController.protect, collaboratorHistoryController.createCollaboratorHistory)
 
 router
     .route('/current')
@@ -40,7 +37,4 @@ router
         collaboratorHistoryController.deleteCollaboratorHistory
     )
 
-router
-    .route('/end/:id')
-    .patch(authController.protect, collaboratorHistoryController.endWork);
 module.exports = router;

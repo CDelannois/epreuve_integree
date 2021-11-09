@@ -6,20 +6,13 @@ const router = express.Router();
 
 
 router
-    .route('/currentCalls')
-    .get(authController.protect, callHistoryController.getCurrentCalls)
-
-router
     .route('/')
     .get(authController.protect, callHistoryController.getAllCallsHistory)
-    .post(
-        authController.protect,
-        authController.restrictTo(
-            'Directeur',
-            'Administratif',
-            'Chef-infirmier'),
-        callHistoryController.createCallHistory
-    )
+    .post(authController.protect, callHistoryController.createCallHistory)
+
+router
+    .route('/currentCalls')
+    .get(authController.protect, callHistoryController.getCurrentCalls)
 
 router
     .route('/:id')
