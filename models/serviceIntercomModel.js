@@ -59,6 +59,9 @@ const serviceIntercomSchema = new mongoose.Schema({
         type: eventSchema,
         required: [true, `Event messages required.`],
     },
+}, {
+    collection: 'serviceintercoms',
+    versionKey: false
 });
 
 const ServiceIntercom = mongoose.model('ServiceIntercom', serviceIntercomSchema);

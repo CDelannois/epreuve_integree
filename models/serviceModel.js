@@ -38,6 +38,9 @@ const serviceSchema = new mongoose.Schema({
         },
             'Level 3 functions ID required'],
     },
+}, {
+    collection: 'services',
+    versionKey: false
 });
 
 

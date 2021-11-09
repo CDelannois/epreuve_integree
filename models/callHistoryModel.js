@@ -42,6 +42,9 @@ const callHistorySchema = new mongoose.Schema({
     actage: {
         type: actageSchema,
     }
+}, {
+    collection: 'callhistories',
+    versionKey: false
 });
 
 const CallHistory = mongoose.model('CallHistory', callHistorySchema);

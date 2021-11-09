@@ -41,6 +41,9 @@ const collaboratorSchema = new mongoose.Schema({
         default: false,
     },
     passwordChangedAt: Date
+}, {
+    collection: 'collaborators',
+    versionKey: false
 });
 
 collaboratorSchema.pre('save', function (next) {

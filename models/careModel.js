@@ -10,6 +10,9 @@ const careSchema = new mongoose.Schema({
         required: [true, 'Care key required'],
         unique: true
     },
+}, {
+    collection: 'cares',
+    versionKey: false
 });
 
 const Care = mongoose.model('Care', careSchema);

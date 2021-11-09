@@ -15,6 +15,10 @@ const buttonSchema = new mongoose.Schema({
         required: [true, 'Button key required'],
         unique: true
     },
+
+}, {
+    collection: 'buttons',
+    versionKey: false
 });
 
 const Button = mongoose.model('Button', buttonSchema);

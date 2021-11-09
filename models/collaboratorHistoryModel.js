@@ -29,6 +29,9 @@ const collaboratorHistorySchema = new mongoose.Schema({
     actage: {
         type: [ObjectId]
     }
+}, {
+    collection: 'collaboratorhistories',
+    versionKey: false
 });
 
 const CollaboratorHistory = mongoose.model('CollaboratorHistory', collaboratorHistorySchema);

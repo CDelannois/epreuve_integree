@@ -23,6 +23,9 @@ const virtualServiceSchema = new mongoose.Schema({
         },
             'Services ID required'],
     },
+}, {
+    collection: 'virtualservices',
+    versionKey: false
 });
 
 

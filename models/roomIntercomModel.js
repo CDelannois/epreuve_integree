@@ -55,6 +55,9 @@ const roomIntercomSchema = new mongoose.Schema({
         type: callSchema,
         required: [true, `Call messages required.`],
     },
+}, {
+    collection: 'roomintercoms',
+    versionKey: false
 });
 
 const RoomIntercom = mongoose.model('RoomIntercom', roomIntercomSchema);

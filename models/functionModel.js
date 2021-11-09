@@ -22,6 +22,9 @@ const functionSchema = new mongoose.Schema({
         default: 0,
         required: [true, `Number of active collaborator assuming this function required.`],
     },
+}, {
+    collection: 'functions',
+    versionKey: false
 });
 
 const Function = mongoose.model('Function', functionSchema);
