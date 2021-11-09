@@ -7,43 +7,77 @@ const VirtualService = require('./../models/virtualServiceModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
+const basePipe = [{
+    $lookup: {
+        from: 'collaborators',
+        localField: 'collaborator',
+        foreignField: '_id',
+        as: 'collaborator'
+    }
+}, {
+    $unwind: '$collaborator'
+}, {
+    $addFields: {
+        collaborator: '$collaborator.name'
+    }
+}, {
+    $lookup: {
+        from: 'services',
+        localField: 'service',
+        foreignField: '_id',
+        as: 'service'
+    }
+}, {
+    $unwind: '$service'
+}, {
+    $addFields: {
+        service: "$service.name"
+    }
+}, {
+    $project: {
+        __v: 0
+    }
+}];
+
+const ended = [{
+    $match: {
+        logoutDate: { $gt: new Date(0) }
+    }
+}]
+
+const inactivePipe = ended.concat(basePipe);
+
 exports.getAllCollaboratorsHistory = catchAsync(async (req, res, next) => {
-    const collaboratorsHistory = await CollaboratorHistory.aggregate([{
-        $lookup: {
-            from: 'collaborators',
-            localField: 'collaborator',
-            foreignField: '_id',
-            as: 'collaborator'
-        }
-    }, {
-        $unwind: '$collaborator'
-    }, {
-        $addFields: {
-            collaborator: '$collaborator.name'
-        }
-    }, {
-        $lookup: {
-            from: 'services',
-            localField: 'service',
-            foreignField: '_id',
-            as: 'service'
-        }
-    }, {
-        $unwind: '$service'
-    }, {
-        $addFields: {
-            service: "$service.name"
-        }
-    }, {
-        $project: {
-            __v: 0
-        }
-    }])
+    const collaboratorsHistory = await CollaboratorHistory.aggregate(inactivePipe)
 
     res.status(200).json({
         status: 'success',
         results: collaboratorsHistory.length,
         data: {
+            collaboratorsHistory
+        }
+    })
+});
+
+const active = [{
+    $match: {
+        logoutDate: new Date(0)
+    }
+}, {
+    $project: {
+        logoutDate: 0
+    }
+}]
+
+const activePipe = basePipe.concat(active);
+
+exports.getActiveCollaboratorsHistory = catchAsync(async (req, res, next) => {
+    const collaboratorsHistory = await CollaboratorHistory.aggregate(activePipe);
+
+    res.status(200).json({
+        status: 'success',
+        results: collaboratorsHistory.length,
+        date: {
             collaboratorsHistory
         }
     })
@@ -121,6 +155,37 @@ exports.updateCollaboratorHistory = catchAsync(async (req, res, next) => {
             collaboratorHistory: updatedCollaboratorHistory
         }
     })
+});
+
+exports.endWork = catchAsync(async (req, res, next) => {
+    const endWork = await CollaboratorHistory.findById(req.params.id);
+
+    if (!endWork) {
+        return next(new AppError('This collaborator entry does not exist.', 404));
+    }
+
+    if (endWork.logoutDate > endWork.loginDate) {
+        return next(new AppError('This collaborator entry has already ended.', 400));
+    }
+
+    //Mise à jour de la date de fin de travail.
+    const updateCollaboratorHistory = { logoutDate: Date.now() };
+    const updatedCollaboratorHistory = await CollaboratorHistory.findByIdAndUpdate(req.params.id, updateCollaboratorHistory);
+
+    //Mise à jour du statut du collaborateur.
+    const updateCollaborator = { active: false };
+    const updatedCollaborator = await Collaborator.findByIdAndUpdate(updatedCollaboratorHistory.collaborator, updateCollaborator);
+
+    //Mise à jour du nombre de personnes actives au sein de la fonction.
+    const activeFunction = await Collaborator.find({ active: true, function: updatedCollaborator.function });
+    const activeFunctionNumber = { enabled: activeFunction.length };
+    const enabledFunction = await Function.findByIdAndUpdate(updatedCollaborator.function, activeFunctionNumber);
+
+    res.status(200).json({
+        status: "success",
+        message: updatedCollaborator.name + " logged out. Currently" + activeFunction.length + " active " + enabledFunction.title + "."
+    })
+
 });
 
 exports.deleteCollaboratorHistory = catchAsync(async (req, res, next) => {
