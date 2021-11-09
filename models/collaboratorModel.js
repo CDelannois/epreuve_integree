@@ -11,6 +11,7 @@ const collaboratorSchema = new mongoose.Schema({
     tts: {
         type: String,
         required: [true, `Collaborator's text to speech is required.`],
+        lowercase: true
     },
     function: {
         type: ObjectId,

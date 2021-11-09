@@ -18,8 +18,4 @@ router
     .route('/active')
     .get(authController.protect, collaboratorController.getActiveCollaborators);
 
-router
-    .route('/login')
-    .post(authController.login)
-
 module.exports = router;
