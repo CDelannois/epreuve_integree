@@ -7,12 +7,33 @@ const router = express.Router();
 router
     .route('/')
     .get(authController.protect, collaboratorController.getAllCollaborators)
-    .post(authController.protect, collaboratorController.createCollaborator)
+    .post(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        collaboratorController.createCollaborator
+    )
 
 router
     .route('/:id')
-    .patch(authController.protect, collaboratorController.updateCollaborator)
-    .delete(authController.protect, collaboratorController.deleteCollaborator)
+    .patch(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        collaboratorController.updateCollaborator
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        collaboratorController.deleteCollaborator
+    )
 
 router
     .route('/active')

@@ -8,7 +8,14 @@ const router = express.Router();
 router
     .route('/')
     .get(authController.protect, collaboratorHistoryController.getAllCollaboratorsHistory)
-    .post(authController.protect, collaboratorHistoryController.createCollaboratorHistory)
+    .post(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        collaboratorHistoryController.createCollaboratorHistory
+    )
 
 router
     .route('/current')
@@ -16,8 +23,22 @@ router
 
 router
     .route('/:id')
-    .patch(authController.protect, collaboratorHistoryController.updateCollaboratorHistory)
-    .delete(authController.protect, collaboratorHistoryController.deleteCollaboratorHistory)
+    .patch(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        collaboratorHistoryController.updateCollaboratorHistory
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        collaboratorHistoryController.deleteCollaboratorHistory
+    )
 
 router
     .route('/end/:id')

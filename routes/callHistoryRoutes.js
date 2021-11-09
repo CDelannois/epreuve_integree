@@ -12,12 +12,33 @@ router
 router
     .route('/')
     .get(authController.protect, callHistoryController.getAllCallsHistory)
-    .post(authController.protect, callHistoryController.createCallHistory)
+    .post(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        callHistoryController.createCallHistory
+    )
 
 router
     .route('/:id')
-    .patch(authController.protect, callHistoryController.updateCallHistory)
-    .delete(authController.protect, callHistoryController.deleteCallHistory)
+    .patch(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        callHistoryController.updateCallHistory
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        callHistoryController.deleteCallHistory
+    )
 
 router
     .route('/act/:id')

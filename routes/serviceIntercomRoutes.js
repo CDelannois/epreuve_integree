@@ -7,11 +7,32 @@ const router = express.Router();
 router
     .route('/')
     .get(authController.protect, serviceIntercomController.getAllServiceIntercoms)
-    .post(authController.protect, serviceIntercomController.createServiceIntercom)
+    .post(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        serviceIntercomController.createServiceIntercom
+    )
 
 router
     .route('/:id')
-    .patch(authController.protect, serviceIntercomController.updateServiceIntercom)
-    .delete(authController.protect, serviceIntercomController.deleteServiceIntercom)
+    .patch(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        serviceIntercomController.updateServiceIntercom
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        serviceIntercomController.deleteServiceIntercom
+    )
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const Collaborator = require('./../models/collaboratorModel');
+const Function = require('./../models/functionModel');
 
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
@@ -65,10 +66,11 @@ exports.protect = catchAsync(async (req, res, next) => {
     next();
 });
 
-exports.restrictTo = (...roles) => {
-    return (req, res, next) => {
-        if (!roles.includes(req.user.function)) {
-            return next(new AppError(`You're not allowed to do that!`, 403));
+exports.restrictTo = (...functions) => {
+    return async (req, res, next) => {
+        const collaboratorFunction = await Function.findById(req.collaborator.function);
+        if (!functions.includes(collaboratorFunction.title)) {
+            return next(new AppError(`You're not allowed to do that! ` + collaboratorFunction.title, 403));
         }
         next();
     }

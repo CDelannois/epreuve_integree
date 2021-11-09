@@ -8,11 +8,32 @@ const router = express.Router();
 router
     .route('/')
     .get(authController.protect, careController.getAllCares)
-    .post(authController.protect, careController.createCare)
+    .post(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        careController.createCare
+    )
 
 router
     .route('/:id')
-    .patch(authController.protect, careController.updateCare)
-    .delete(authController.protect, careController.deleteCare)
+    .patch(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        careController.updateCare
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        careController.deleteCare
+    )
 
 module.exports = router;

@@ -7,11 +7,32 @@ const router = express.Router();
 router
     .route('/')
     .get(authController.protect, buttonController.getAllButtons)
-    .post(authController.protect, buttonController.createButton)
+    .post(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        buttonController.createButton
+    )
 
 router
     .route('/:id')
-    .patch(authController.protect, buttonController.updateButton)
-    .delete(authController.protect, buttonController.deleteButton)
+    .patch(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        buttonController.updateButton
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo(
+            'Directeur',
+            'Administratif',
+            'Chef-infirmier'),
+        buttonController.deleteButton
+    )
 
 module.exports = router;
