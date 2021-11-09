@@ -1,16 +1,18 @@
 const express = require('express');
 const roomIntercomController = require('../controllers/roomIntercomController');
+const authController = require('./../controllers/authController');
+
 
 const router = express.Router();
 
 router
     .route('/')
-    .get(roomIntercomController.getAllRoomIntercoms)
-    .post(roomIntercomController.createRoomIntercom)
+    .get(authController.protect, roomIntercomController.getAllRoomIntercoms)
+    .post(authController.protect, roomIntercomController.createRoomIntercom)
 
 router
     .route('/:id')
-    .patch(roomIntercomController.updateRoomIntercom)
-    .delete(roomIntercomController.deleteRoomIntercom)
+    .patch(authController.protect, roomIntercomController.updateRoomIntercom)
+    .delete(authController.protect, roomIntercomController.deleteRoomIntercom)
 
 module.exports = router;

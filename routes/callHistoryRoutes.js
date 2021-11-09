@@ -7,20 +7,20 @@ const router = express.Router();
 
 router
     .route('/currentCalls')
-    .get(callHistoryController.getCurrentCalls)
+    .get(authController.protect, callHistoryController.getCurrentCalls)
 
 router
     .route('/')
     .get(authController.protect, callHistoryController.getAllCallsHistory)
-    .post(callHistoryController.createCallHistory)
+    .post(authController.protect, callHistoryController.createCallHistory)
 
 router
     .route('/:id')
-    .patch(callHistoryController.updateCallHistory)
-    .delete(callHistoryController.deleteCallHistory)
+    .patch(authController.protect, callHistoryController.updateCallHistory)
+    .delete(authController.protect, callHistoryController.deleteCallHistory)
 
 router
     .route('/act/:id')
-    .patch(callHistoryController.actCallHistory)
+    .patch(authController.protect, callHistoryController.actCallHistory)
 
 module.exports = router;

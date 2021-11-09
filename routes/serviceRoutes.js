@@ -1,16 +1,17 @@
 const express = require('express');
 const serviceController = require('../controllers/serviceController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
 router
     .route('/')
-    .get(serviceController.getAllServices)
-    .post(serviceController.createService)
+    .get(authController.protect, serviceController.getAllServices)
+    .post(authController.protect, serviceController.createService)
 
 router
     .route('/:id')
-    .patch(serviceController.updateService)
-    .delete(serviceController.deleteService)
+    .patch(authController.protect, serviceController.updateService)
+    .delete(authController.protect, serviceController.deleteService)
 
 module.exports = router;

@@ -1,16 +1,17 @@
 const express = require('express');
 const buttonController = require('../controllers/buttonController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
 router
     .route('/')
-    .get(buttonController.getAllButtons)
-    .post(buttonController.createButton)
+    .get(authController.protect, buttonController.getAllButtons)
+    .post(authController.protect, buttonController.createButton)
 
 router
     .route('/:id')
-    .patch(buttonController.updateButton)
-    .delete(buttonController.deleteButton)
+    .patch(authController.protect, buttonController.updateButton)
+    .delete(authController.protect, buttonController.deleteButton)
 
 module.exports = router;

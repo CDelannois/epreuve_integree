@@ -1,22 +1,22 @@
 const express = require('express');
-const collaboratorController = require('../controllers/collaboratorController');
-const authController = require('./../controllers/authController')
+const collaboratorController = require('./../controllers/collaboratorController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
 router
     .route('/')
-    .get(collaboratorController.getAllCollaborators)
-    .post(collaboratorController.createCollaborator)
+    .get(authController.protect, collaboratorController.getAllCollaborators)
+    .post(authController.protect, collaboratorController.createCollaborator)
 
 router
     .route('/:id')
-    .patch(collaboratorController.updateCollaborator)
-    .delete(collaboratorController.deleteCollaborator)
+    .patch(authController.protect, collaboratorController.updateCollaborator)
+    .delete(authController.protect, collaboratorController.deleteCollaborator)
 
 router
     .route('/active')
-    .get(collaboratorController.getActiveCollaborators);
+    .get(authController.protect, collaboratorController.getActiveCollaborators);
 
 router
     .route('/login')
