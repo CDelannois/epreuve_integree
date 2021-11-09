@@ -4,8 +4,6 @@ const authController = require('./../controllers/authController')
 
 const router = express.Router();
 
-router.post('/login', authController.login)
-
 router
     .route('/')
     .get(collaboratorController.getAllCollaborators)
@@ -15,5 +13,13 @@ router
     .route('/:id')
     .patch(collaboratorController.updateCollaborator)
     .delete(collaboratorController.deleteCollaborator)
+
+router
+    .route('/active')
+    .get(collaboratorController.getActiveCollaborators);
+
+router
+    .route('/login')
+    .post(authController.login)
 
 module.exports = router;

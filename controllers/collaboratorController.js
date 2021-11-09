@@ -5,26 +5,28 @@ const CollaboratorHistory = require('./../models/collaboratorHistoryModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
+const basePipe = [{
+    $lookup: {
+        from: 'functions',
+        localField: 'function',
+        foreignField: '_id',
+        as: 'function'
+    }
+}, {
+    $unwind: '$function'
+}, {
+    $addFields: {
+        function: "$function.title"
+    }
+}, {
+    $project: {
+        __v: 0,
+        password: 0
+    }
+}];
+
 exports.getAllCollaborators = catchAsync(async (req, res, next) => {
-    const collaborators = await Collaborator.aggregate([{
-        $lookup: {
-            from: 'functions',
-            localField: 'function',
-            foreignField: '_id',
-            as: 'function'
-        }
-    }, {
-        $unwind: '$function'
-    }, {
-        $addFields: {
-            function: "$function.title"
-        }
-    }, {
-        $project: {
-            __v: 0,
-            password: 0
-        }
-    }])
+    const collaborators = await Collaborator.aggregate(basePipe);
 
     res.status(200).json({
         status: 'success',
@@ -32,7 +34,27 @@ exports.getAllCollaborators = catchAsync(async (req, res, next) => {
         data: {
             collaborators
         }
-    })
+    });
+});
+
+const active = [{
+    $match: {
+        active: true
+    }
+}];
+
+const activePipe = active.concat(basePipe);
+
+exports.getActiveCollaborators = catchAsync(async (req, res, next) => {
+    const activeCollaborators = await Collaborator.aggregate(activePipe);
+
+    res.status(200).json({
+        status: 'success',
+        results: activeCollaborators.length,
+        data: {
+            activeCollaborators
+        }
+    });
 });
 
 exports.createCollaborator = catchAsync(async (req, res, next) => {
