@@ -5,11 +5,7 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
 exports.getAllCares = catchAsync(async (req, res, next) => {
-    const cares = await Care.aggregate([{
-        $project: {
-            __v: 0
-        }
-    }])
+    const cares = await Care.find()
 
     res.status(200).json({
         status: 'success',

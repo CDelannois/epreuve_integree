@@ -18,10 +18,6 @@ exports.getAllServiceIntercoms = catchAsync(async (req, res, next) => {
         $addFields: {
             service: "$service.name"
         }
-    }, {
-        $project: {
-            __v: 0
-        }
     }])
     res.status(200).json({
         status: 'success',

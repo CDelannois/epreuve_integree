@@ -42,10 +42,6 @@ exports.getAllVirtualServices = catchAsync(async (req, res, next) => {
         $replaceRoot: {
             newRoot: '$virtualServicesDetails'
         }
-    }, {
-        $project: {
-            __v: 0
-        }
     }])
 
     res.status(200).json({

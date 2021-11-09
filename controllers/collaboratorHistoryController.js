@@ -33,10 +33,6 @@ const basePipe = [{
     $addFields: {
         service: "$service.name"
     }
-}, {
-    $project: {
-        __v: 0
-    }
 }];
 
 const ended = [{

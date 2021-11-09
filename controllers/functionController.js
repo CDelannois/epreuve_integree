@@ -7,11 +7,7 @@ const AppError = require('./../utils/appError');
 
 exports.getAllFunctions = catchAsync(async (req, res, next) => {
 
-    const functions = await Function.aggregate([{
-        $project: {
-            __v: 0
-        }
-    }])
+    const functions = await Function.find()
 
     res.status(200).json({
         status: 'success',

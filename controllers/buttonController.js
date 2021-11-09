@@ -5,11 +5,7 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
 exports.getAllButtons = catchAsync(async (req, res) => {
-    const buttons = await Button.aggregate([{
-        $project: {
-            __v: 0
-        }
-    }]);
+    const buttons = await Button.find();
     res.status(200).json({
         status: 'success',
         results: buttons.length,

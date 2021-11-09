@@ -51,10 +51,6 @@ const basePipe = [{
             collaborator: "$actage.collaborator.name"
         }
     }
-}, {
-    $project: {
-        __v: 0
-    }
 }]
 
 const finish = [{

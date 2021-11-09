@@ -5,11 +5,7 @@ const AppError = require('./../utils/appError');
 
 exports.getAllRoomIntercoms = catchAsync(async (req, res, next) => {
 
-    const roomIntercoms = await RoomIntercom.aggregate([{
-        $project: {
-            __v: 0
-        }
-    }])
+    const roomIntercoms = await RoomIntercom.find()
 
     res.status(200).json({
         status: 'success',

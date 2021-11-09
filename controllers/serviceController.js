@@ -70,12 +70,7 @@ exports.getAllServices = catchAsync(async (req, res, next) => {
             $replaceRoot: {
                 newRoot: '$servicesDetails'
             }
-        }, {
-            $project: {
-                __v: 0
-            }
-        }
-    ]);
+        }]);
 
     res.status(200).json({
         status: 'success',
