@@ -47,7 +47,7 @@ app.use('/serviceIntercom', serviceIntercomRouter);
 app.use('/service', serviceRouter);
 app.use('/virtualService', virtualServiceRouter);
 
-setInterval(exportData, 5000);
+// setInterval(exportData, 86400000);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
