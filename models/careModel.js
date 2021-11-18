@@ -4,6 +4,7 @@ const careSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Care name required'],
+        unique: true
     },
     key: {
         type: Number,
