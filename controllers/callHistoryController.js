@@ -145,6 +145,28 @@ exports.createCallHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.updateCallHistory = catchAsync(async (req, res, next) => {
+
+    if (req.body.location) {
+        const newButton = await Button.findById(req.body.location);
+        if (!newButton) {
+            return next(new AppError('This button does not exist.', 404));
+        }
+    }
+
+    if (req.body.service) {
+        const newService = await Service.findById(req.body.service);
+        if (!newService) {
+            return next(new AppError('This service does not exist.', 404));
+        }
+    }
+
+    if (req.body.actage.collaborator) {
+        const newCollaborator = await Collaborator.findById(req.body.actage.collaborator);
+        if (!newCollaborator) {
+            return next(new AppError('This collaborator does not exist.', 404));
+        }
+    }
+
     const updatedCallHistory = await CallHistory.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
@@ -178,7 +200,6 @@ exports.updateCallHistory = catchAsync(async (req, res, next) => {
 
 exports.actCallHistory = catchAsync(async (req, res, next) => {
     req.body.actage.collaborator = req.collaborator._id;
-    console.log(req.body);
     const callHistory = await CallHistory.findById(req.params.id);
 
     //Si l'appel n'existe pas ==> erreur
@@ -193,13 +214,13 @@ exports.actCallHistory = catchAsync(async (req, res, next) => {
 
     const collaboratorHistory = await CollaboratorHistory.find({ collaborator: req.collaborator._id, logoutDate: new Date(0) });
 
-    //Si le collaborateur n'existe pas ==> erreur
-    if (!collaboratorHistory) {
-        return next(new AppError(`This collaborator does not exist.`), 404);
+    //Si l'historique collaborateur n'existe pas ==> erreur
+    if (collaboratorHistory.length === 0) {
+        return next(new AppError(`This collaborator entry does not exist.`), 404);
     }
 
     //Si le soignant n'est pas actif ou pas autorisé dans le service ==> erreur
-    if (new Date(collaboratorHistory.logoutDate) > new Date(collaboratorHistory.loginDate || collaboratorHistory.service != callHistory.service)) {
+    if (new Date(collaboratorHistory.logoutDate) > new Date(collaboratorHistory.loginDate) || collaboratorHistory[0].service != callHistory.service) {
         return next(new AppError('Collaborator not allowed to act in this service.'), 401);
     }
 
@@ -223,6 +244,12 @@ exports.actCallHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteCallHistory = catchAsync(async (req, res, next) => {
+    const collaboratorHistory = await CollaboratorHistory.findOne({ calls: req.params.id });
+
+    if (collaboratorHistory) {
+        return next(new AppError('This call is used somewhere else.', 400));
+    }
+
     const callHistory = await CallHistory.findByIdAndDelete(req.params.id)
 
     if (!callHistory) {

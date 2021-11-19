@@ -146,6 +146,23 @@ exports.createCollaboratorHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.updateCollaboratorHistory = catchAsync(async (req, res, next) => {
+    async function verifyCalls(calls) {
+        for (let el of calls) {
+            let callHistory = await CallHistory.findById(el);
+            if (!callHistory) {
+                return next(new AppError("This call does not exist.", 404));
+            }
+        }
+    }
+
+    if (req.body.calls) {
+        verifyCalls(req.body.calls);
+    }
+
+    if (req.body.actage) {
+        verifyCalls(req.body.actage);
+    }
+
     const updatedCollaboratorHistory = await CollaboratorHistory.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,

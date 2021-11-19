@@ -50,6 +50,7 @@ const roomIntercomSchema = new mongoose.Schema({
     roomPhone: {
         type: String,
         required: [true, `Room's phone required.`],
+        unique: true,
     },
     call: {
         type: callSchema,

@@ -2,6 +2,7 @@ const { ObjectId } = require('bson');
 const mongoose = require('mongoose');
 const hash = require('./passwordHash');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 const collaboratorSchema = new mongoose.Schema({
     name: {
@@ -16,6 +17,13 @@ const collaboratorSchema = new mongoose.Schema({
     function: {
         type: ObjectId,
         required: [true, 'Function ID required.'],
+    },
+    pin: {
+        type: String,
+        required: [true, `Pin code required.`],
+        validate: function (pinInput) {
+            return validator.isInt(pinInput, { max: 9999, allow_leading_zeroes: true });
+        }
     },
     password: {
         type: String,
